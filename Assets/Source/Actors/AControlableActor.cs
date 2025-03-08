@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 // 一切可以响应玩家输入的单位
 // 
@@ -14,6 +15,10 @@ public enum EControlableProperties : int
 }
 public class AControlableActor : Actor
 {
+    public Vector2 direction;
+    public float speed;
+
+
     public int ControlableProperties = (int)EControlableProperties.None;
     public void AddControlableProperties(EControlableProperties property)
     {
@@ -27,5 +32,10 @@ public class AControlableActor : Actor
     protected override void Init()
     {
         base.Init();
+    }
+
+    public void SetVelocityDirection(Vector2Int iDir)
+    {
+        direction = ((Vector2)iDir).normalized;
     }
 }
