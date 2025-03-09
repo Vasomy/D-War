@@ -23,5 +23,17 @@ public class MMoveSystem : SingletonBase<MMoveSystem>
                     GridManager.GetIndexedPos(CameraController.instance.GetMousePos())));
             }
         }
+        foreach(var ff in ffpf)
+        {
+            ff.Update();
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        foreach(var ff in ffpf)
+        {
+            ff.GizmosDraw();
+        }
     }
 }

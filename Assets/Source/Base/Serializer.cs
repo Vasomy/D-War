@@ -11,7 +11,6 @@ public class Serializer<T>
     public string CastToJson()
     {
         string json = JsonUtility.ToJson(target);
-        Debug.Log(json);
         return json;
     }
     public void SetTarget(T inTarget)

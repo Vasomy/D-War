@@ -33,9 +33,14 @@ public class AControlableActor : Actor
     {
         base.Init();
     }
-
-    public void SetVelocityDirection(Vector2Int iDir)
+    public override void SetType()
     {
-        direction = ((Vector2)iDir).normalized;
+        ettType = EEntityType.Controlable;
+    }
+    public void SetVelocityDirection(Vector2 fDir)
+    {
+
+        rb2d.velocity = fDir.normalized * speed;
+        Debug.Log(fDir * speed);
     }
 }

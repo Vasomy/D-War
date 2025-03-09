@@ -13,7 +13,7 @@ public class GridManager : SingletonBase<GridManager>
     protected override void ConstructFunction() 
     {
         previewGrid = new Hashtable();
-        Debug.Log((int)(-0.5f));
+        //Debug.Log((int)(-0.5f));
     }
     
     protected override void OnUpdate()
@@ -89,8 +89,8 @@ public class GridManager : SingletonBase<GridManager>
 
     // GridManager 所管理的grid的数量 width*height = girdsNum
     // 其数据来源于FMap类
-    public int width;
-    public int height;
+    public int width=>currentMap.width;
+    public int height=>currentMap.height;
     [SerializeField]
     private int cursorOnGirdX;
     [SerializeField]

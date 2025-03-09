@@ -16,6 +16,7 @@ public class Entity : MonoBehaviour
     public long uid;
     private bool isSelected = false;
     public EEntityType ettType = EEntityType.Entity;
+    public Rigidbody2D rb2d;
     // 通知实体被选中
     public void InfoSelect()
     {
@@ -34,12 +35,11 @@ public class Entity : MonoBehaviour
     
     private void Awake()
     {
-        uid = GameContext.instance.GetId();
+        
     }
     // 在最低子类中不应该重写Start
     private void Start()
     {
-        gameObject.tag = "Entity";
         Init();
     }
 
@@ -54,6 +54,9 @@ public class Entity : MonoBehaviour
     /// </summary>
     protected virtual void Init()
     {
+        gameObject.tag = "Entity";
+        uid = GameContext.instance.GetId();
+        rb2d = GetComponent<Rigidbody2D>();
         SetType();
     }
   

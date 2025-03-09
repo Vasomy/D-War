@@ -25,13 +25,9 @@ public class GameContext : SingletonBase<GameContext>
                 DictBuildingsPrefab.Add(bds.buildingName, bd);
             }
         }
-        at a = new at();
-        a.a = 1;
-        a.b = 2.0f;
-        a.c = "SS";
-        Serializer<at> serializer = new Serializer<at>();
-        serializer.SetTarget(a);
-        serializer.CastToJson();
+        
+        
+        
     }
     // player stats info
 
