@@ -17,5 +17,6 @@ public class BuildingsUISlot : MonoBehaviour
     {
         Builder.instance.previewObj.SetActive(true);
         Builder.instance.selectedBuildingsName = buildingsName;
+        Builder.instance.previewSr.sprite = buildingsSprite;
     }
 }

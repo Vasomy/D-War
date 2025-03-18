@@ -10,7 +10,6 @@ public class BTower : Buildings
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-
     public override bool CalculateBuildingArea(Vector3 position,bool isPreview = false, bool isDelete = false)
     {
         return GridManager.CalculateOccupiedArea(uid, position,

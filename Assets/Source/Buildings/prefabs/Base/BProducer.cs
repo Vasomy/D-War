@@ -47,7 +47,7 @@ public class BProducer : Buildings
         }
         if(cells.Count!=0)
         {
-            return;
+            
             var rd = Random.Range(0, cells.Count);
             var gPos = GridManager.GetPointByIndexedPos(cells[rd]);
             gPos = gPos - (Vector2)transform.position;

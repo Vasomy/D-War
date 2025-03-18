@@ -33,6 +33,8 @@ public class FlowField
     public List<List<FlowFieldNode>> nodes;
     public float gridX;
     public float gridY;
+
+
     public FlowField(Vector2Int inTarget)
     {
 
@@ -174,57 +176,125 @@ public class FlowField
                 }
             }
 
+            
+
             //Debug.Log("FFPF Count : "+cCount);
         }
     }
 }
-
 public class FlowFieldPathFinding
 {
     public Vector2Int target;
     public Vector2    pointTarget;
     public FlowField flowField;
-    public List<AControlableActor> entities;
+    public int ettCount;
+    //  dict replace list
+    public Dictionary<long, AControlableActor> entities; // entity.uid is key
+    //public List<AControlableActor> entities;
+    public float expectMaxTime = 0.0f;// 该流场下的单位到达目的地（附近的最长时间）+ 0.5f, 该时间就是该类是生命周期
+    public FTimer timer;
     public FlowFieldPathFinding(List<Entity>selectedEntites,Vector2Int inTarget)
     {
         target = inTarget;
         pointTarget = GridManager.GetPointByIndexedPos(target);
         flowField = new FlowField(target);
-        UpdateFlowField();
-        entities = new List<AControlableActor>();
+        //entities = new List<AControlableActor>();
+        entities = new Dictionary<long, AControlableActor>();
         foreach(var ett in selectedEntites)
         {
-            if(ett.ettType == EEntityType.Controlable)
+            if(ett.TryGetComponent<ICanMove>(out var icm))
             {
-                entities.Add((AControlableActor)ett);
+                Debug.Log("To ett a ffpf");
+                var caEtt = FCast.Cast<AControlableActor>(ett);
+                if (caEtt.curFFPF != null)
+                { 
+                    Debug.Log("Has curFFPF");
+                    caEtt.curFFPF.entities.Remove(caEtt.uid);
+                    caEtt.curFFPF = null;
+                }
+                ((AControlableActor)ett).curFFPF = this;
+                entities.Add(ett.uid,(AControlableActor)ett);
+                icm.ChangeToMoveState();
             }
         }
+        timer = new FTimer();
+        UpdateFlowField();
+    }
+
+    public void End()
+    {
+        
+        foreach(var ett in entities)
+        {
+            ett.Value.curFFPF = null;
+            if(ett.Value.TryGetComponent<ICanMove>(out var icm))
+            {
+                icm.iDirection = Vector2.zero;
+            }
+        }
+    }
+
+    public void AddEntity(AControlableActor ett)
+    {
+        ett.TryGetComponent<ICanMove>(out var icm);
+        if(icm ==null)
+        {
+            return;
+        }
+        entities.Add(ett.uid, ett);
+        var node = flowField.GetNode(ett.transform.position);
+        float eTime = node.fCost / icm.iSpeed;
+        expectMaxTime = Mathf.Max(eTime, expectMaxTime); ;
     }
 
     public void UpdateFlowField()
     {
         flowField.Update();
+        foreach(var ett in entities)
+        {
+            ett.Value.TryGetComponent<ICanMove>(out var icm);
+            if (icm == null)
+            {
+                return;
+            }
+            // 一个实体所在的位置的节点
+            var node = flowField.GetNode(ett.Value.transform.position);
+            float eTime = node.fCost/icm.iSpeed;
+            expectMaxTime = Mathf.Max(eTime,expectMaxTime);
+        }
+        timer.SetGap(expectMaxTime);
+        //Debug.Log("Expect Time : " + expectMaxTime);
     }
 
-    public void Update()
+    public bool Update()
     {
+        ettCount = entities.Count;
+        if(timer.Timer())
+        {
+            return true;
+        }
+        if(entities.Count==0)
+        {
+            return true;
+        }
         //Debug.Log("Ett Count : "+entities.Count);
         foreach(var ett in entities)
         {
-            var node = flowField.GetNode(ett.transform.position);
+            var node = flowField.GetNode(ett.Value.transform.position);
             if (node != target)
             {
                 Vector2 fDir = node.direction;
                 fDir = GridManager.GetPointByIndexedPos(new Vector2Int(node.x, node.y))
-                    + fDir * new Vector2(flowField.gridX, flowField.gridY) / 2.0f - (Vector2)ett.transform.position;
-                ett.SetVelocityDirection(fDir);
+                    + fDir * new Vector2(flowField.gridX, flowField.gridY) / 2.0f - (Vector2)ett.Value.transform.position;
+                ett.Value.SetVelocityDirection(fDir);
             }
             else
             {
-                Vector2 fDir = GridManager.GetPointByIndexedPos(target) - (Vector2)ett.transform.position;
-                ett.SetVelocityDirection(fDir);
+                Vector2 fDir = GridManager.GetPointByIndexedPos(target) - (Vector2)ett.Value.transform.position;
+                ett.Value.SetVelocityDirection(fDir);
             }
         }
+        return false;
     }
 
     public void GizmosDraw()

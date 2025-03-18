@@ -13,10 +13,11 @@ public class Builder : SingletonBase<Builder>
     /// 预览obj应该有一个spriterenderer
     /// </summary>
     public GameObject previewObj;
-
+    public SpriteRenderer previewSr=>previewObj.GetComponent<SpriteRenderer>();
     protected override void ConstructFunction()
     {
         base.ConstructFunction();
+        
     }
 
     bool dirty = false;
@@ -33,6 +34,7 @@ public class Builder : SingletonBase<Builder>
             var result = GameContext.instance.DictBuildingsPrefab.TryGetValue(selectedBuildingsName, out var targetBd);
             if(result == false)
             {
+                Debug.Log("Failed to find building named " +  selectedBuildingsName);
                 return;
             }
             var targetPos = GridManager.AlignPoint(CameraController.instance.GetMousePos());
@@ -40,7 +42,13 @@ public class Builder : SingletonBase<Builder>
 
             bool isLegal = bd.CalculateBuildingArea(targetPos,true);
 
-            if (isLegal && Input.GetMouseButtonDown(0))
+            if(!isLegal)
+            {
+                Debug.Log("This grid already occupied!");
+                return;
+            }
+
+            if (Input.GetMouseButtonDown(0))
             {
                 Instantiate(targetBd, targetPos, new Quaternion(), builds.transform);
             }

@@ -12,6 +12,7 @@ public class MSelectSystem : SingletonBase<MSelectSystem>
     }
 
     public List<Entity> selectedEntity;
+    public bool doSelected = false;// 表示当前游戏主循环调用了一次 Select ， 如果为true则不在该类循环中检测取消选中
 
     [SerializeField]
     bool onDrawingRect = false;
@@ -27,6 +28,11 @@ public class MSelectSystem : SingletonBase<MSelectSystem>
     protected override void OnUpdate()
     {
         
+        if (doSelected == false&&Input.GetMouseButtonDown(0))
+        {
+            ReleaseCapture();
+            selectedEntity.Clear();
+        }
         if (Input.GetMouseButtonDown(0))
         {
             onDrawingRect = true;
@@ -36,7 +42,7 @@ public class MSelectSystem : SingletonBase<MSelectSystem>
         if (onDrawingRect && Input.GetMouseButtonUp(0))
         {
             onDrawingRect = false;
-            if (CompareFunction.ManhattanDistance(RectBeginPos, RectEndPos) > 5.0f)
+            //if (CompareFunction.ManhattanDistance(RectBeginPos, RectEndPos) > 5.0f)
                 CheckSelectEntity(RectBeginPos, RectEndPos);
         }
         if (onDrawingRect)
@@ -46,14 +52,11 @@ public class MSelectSystem : SingletonBase<MSelectSystem>
         // do someting on selected entity
         // try to move
         var mousePos2 = CameraController.instance.GetMouseScreenPos();
-        if (Input.GetMouseButtonDown(1))
-        {
-            
-        }
 
 
-
+        doSelected = false;
     }
+
 
     void CheckSelectEntity(Vector3 rectBeginPos, Vector3 rectEndPos)
     {
@@ -84,6 +87,14 @@ public class MSelectSystem : SingletonBase<MSelectSystem>
         }
 
         instance.selectedEntity.Clear();
+    }
+
+    public static void SelectEntity(Entity ett)
+    {
+        ReleaseCapture();
+        instance.selectedEntity.Clear();
+        instance.selectedEntity.Add(ett);
+        instance.doSelected = true;
     }
 
     void SelectEntityOneByOne(Entity entity)

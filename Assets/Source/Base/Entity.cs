@@ -8,10 +8,11 @@ public enum EEntityType
     Entity,
     Actor,
     Controlable,
-    Building
+    Building,
+    Collectable,
 }
 
-public class Entity : MonoBehaviour
+public class Entity : MonoBehaviour , IColliderable
 {
     public long uid;
     private bool isSelected = false;
@@ -43,6 +44,12 @@ public class Entity : MonoBehaviour
         Init();
     }
 
+    // 不应该重写Update
+    private void Update()
+    {
+        OnUpdate();
+    }
+
     public virtual void SetType()
     {
         ettType = EEntityType.Entity;
@@ -51,6 +58,7 @@ public class Entity : MonoBehaviour
     /// <summary>
     /// 实体的初始化函数，应该在每个子类中具体实现
     /// 在父类中的Start调用
+    /// 每一个子类重写Init时必须在内部调用 base.Init();
     /// </summary>
     protected virtual void Init()
     {
@@ -59,5 +67,36 @@ public class Entity : MonoBehaviour
         rb2d = GetComponent<Rigidbody2D>();
         SetType();
     }
-  
+
+   
+    private void OnMouseOver()
+    {
+        int key_code = Input.GetMouseButtonDown(0) == true?0:-1;
+        key_code = Input.GetMouseButtonDown(1) == true?1:key_code;
+        Debug.Log(key_code);
+        switch (key_code)
+        {
+        // left mouse button
+        case 0:
+            {
+                OnMouseLeftButtonDown();
+                    break;
+            }
+        case 1:
+                OnMouseRightButtonDown();
+            break;
+        }
+    }
+
+    public virtual void OnMouseLeftButtonDown()
+    {
+    }    
+    public virtual void OnMouseRightButtonDown()
+    {
+    }
+
+    protected virtual void OnUpdate()
+    {
+
+    }
 }

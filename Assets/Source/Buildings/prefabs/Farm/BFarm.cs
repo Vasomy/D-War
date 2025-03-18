@@ -19,4 +19,11 @@ public class BFarm : BProducer
         }
     }
 
+    public override bool CalculateBuildingArea(Vector3 position, bool isPreview = false, bool isDelete = false)
+    {
+        return GridManager.CalculateOccupiedArea(uid, position,
+            lWidth, rWidth, uHeight, dHeight,
+            isPreview, isDelete);
+    }
+
 }
