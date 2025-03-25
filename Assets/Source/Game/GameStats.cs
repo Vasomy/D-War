@@ -19,7 +19,7 @@ public class PStats<T>  where T : PStats<T>
 
     }
 }
-
+[Serializable]
 public class PResourceStats : PStats<PResourceStats>
 {
     public int woods = 0; //ľͷ

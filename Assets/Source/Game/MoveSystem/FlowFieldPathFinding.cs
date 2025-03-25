@@ -214,7 +214,6 @@ public class FlowFieldPathFinding
                 }
                 ((AControlableActor)ett).curFFPF = this;
                 entities.Add(ett.uid,(AControlableActor)ett);
-                icm.ChangeToMoveState();
             }
         }
         timer = new FTimer();
@@ -245,6 +244,11 @@ public class FlowFieldPathFinding
         var node = flowField.GetNode(ett.transform.position);
         float eTime = node.fCost / icm.iSpeed;
         expectMaxTime = Mathf.Max(eTime, expectMaxTime); ;
+    }
+
+    public void RemoveEntity(AControlableActor ett)
+    {
+        entities.Remove(ett.uid);
     }
 
     public void UpdateFlowField()

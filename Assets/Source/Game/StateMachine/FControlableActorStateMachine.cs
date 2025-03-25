@@ -12,7 +12,18 @@ public class FControlableActorState : FState
     }
     //public EControlableProperties actor=>stateMachine.actor;
     public FControlableActorStateMachine stateMachine;
+    public AControlableActor actor => stateMachine.actor;
 }
+
+public class FCAIdleState : FControlableActorState
+{
+    public FCAIdleState(FControlableActorStateMachine inStateMachine)
+        :base(inStateMachine)
+    {
+
+    }
+}
+
 
 public class FCAMoveState : FControlableActorState
 {
@@ -34,8 +45,7 @@ public class FCAMoveState : FControlableActorState
         {
             // change to idle
         }
-        Vector2 v = icm.iDirection * icm.iSpeed;
-        stateMachine.actor.rb2d.velocity = v;
+        icm.Move(stateMachine.actor.rb2d);
     }
 
     public override void End()
@@ -46,16 +56,17 @@ public class FCAMoveState : FControlableActorState
 
 public class FCACollectState : FControlableActorState
 {
+    public ICanMove icm;
     public ICanCollect icc;
-    public EAlignedEntity target;
-    
+    public ECollectableEntity target;
+    bool goCollect = false;
     public FCACollectState(FControlableActorStateMachine stateMachine,ICanCollect icc)
         :base(stateMachine)
     {
         this.icc = icc;
     }
 
-    public void SetTarget(EAlignedEntity inTarget)
+    public void SetTarget(ECollectableEntity inTarget)
     {
         target = inTarget;
     }
@@ -63,17 +74,43 @@ public class FCACollectState : FControlableActorState
     public override void Begin()
     {
         base.Begin();
+        Debug.Log("wt go to move");
+        
+        MMoveSystem.MoveTo(stateMachine.actor, target.indexedPos);
+        Debug.Log("finish wt go to move");
+        icm = stateMachine.actor.GetComponent<ICanMove>();
     }
 
     public override void End()
     {
         base.End();
+        goCollect = false;
+        target = null;
     }
 
     public override void Update()
     {
         base.Update();
-        if()
+        float tDis = target.collectRadius;
+        var pPos = stateMachine.actor.transform.position;
+        var tPos = target.transform.position;
+
+        if(goCollect)
+        {
+            // do collect
+            // set animation
+            target.DoCollect(icc.iCollectForce);
+            return;
+        }
+        else
+        {
+            icm.Move(actor.rb2d);
+        }
+
+        if((pPos - tPos).magnitude<=tDis+icc.iCollectDistance)
+        {
+            goCollect = true;
+        }
     }
 }
 

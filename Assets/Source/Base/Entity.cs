@@ -18,6 +18,7 @@ public class Entity : MonoBehaviour , IColliderable
     private bool isSelected = false;
     public EEntityType ettType = EEntityType.Entity;
     public Rigidbody2D rb2d;
+    public Vector2Int indexedPos => GridManager.GetIndexedPos(transform.position);
     // 通知实体被选中
     public void InfoSelect()
     {

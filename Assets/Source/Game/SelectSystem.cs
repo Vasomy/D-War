@@ -42,7 +42,7 @@ public class MSelectSystem : SingletonBase<MSelectSystem>
         if (onDrawingRect && Input.GetMouseButtonUp(0))
         {
             onDrawingRect = false;
-            //if (CompareFunction.ManhattanDistance(RectBeginPos, RectEndPos) > 5.0f)
+            if (CompareFunction.ManhattanDistance(RectBeginPos, RectEndPos) > 5.0f)
                 CheckSelectEntity(RectBeginPos, RectEndPos);
         }
         if (onDrawingRect)

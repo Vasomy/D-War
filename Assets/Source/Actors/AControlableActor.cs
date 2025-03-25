@@ -30,7 +30,7 @@ public class AControlableActor : Actor
     public int ControlableProperties = (int)EControlableProperties.None;
     public void AddControlableProperties(EControlableProperties property)
     {
-        ControlableProperties &= (int)property;
+        ControlableProperties |= (int)property;
     }
     public bool HasProperty(EControlableProperties property)
     {

@@ -14,6 +14,10 @@ public interface ICanMove
     float iSpeed { get; set; }
     Vector2 iDirection { get; set; } // 速度方向
     void ChangeToMoveState();
+    void Move(Rigidbody2D rb2d)
+    {
+        rb2d.velocity = iSpeed * iDirection;
+    }
 }
 
 
@@ -22,5 +26,5 @@ public interface ICanCollect
 {
     float iCollectDistance { get;set; }
     float iCollectForce { get; set; }
-    public void ChangeToCollectState(EAlignedEntity target);
+    public void ChangeToCollectState(ECollectableEntity target);
 }

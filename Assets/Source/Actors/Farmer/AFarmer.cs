@@ -7,18 +7,23 @@ public class AFarmer : AControlableActor , ICanCollect,ICanMove
     Vector2 ICanMove.iDirection { get; set; } = Vector2.zero;
     float ICanMove.iSpeed { get; set; } = 1.0f;
     float ICanCollect.iCollectForce { get; set; } = 1.0f;
-    float ICanCollect.iCollectDistance { get; set; } = 1.0f;
+    float ICanCollect.iCollectDistance { get; set; } = 0.5f;
 
     FControlableActorStateMachine stateMachine;
     FCAMoveState moveState;
+    FCACollectState collectState;
 
     protected override void OnUpdate()
     {
         base.OnUpdate();
         stateMachine.Update();
+        if(stateMachine.currentState!=null)
+            Debug.Log(stateMachine.currentState.ToString());
     }
-    public void ChangeToCollectState(EAlignedEntity ett)
+    public void ChangeToCollectState(ECollectableEntity ett)
     {
+        collectState.target = ett;
+        stateMachine.ChangeState(collectState);
     }
 
     public void ChangeToMoveState()
@@ -31,6 +36,7 @@ public class AFarmer : AControlableActor , ICanCollect,ICanMove
         base.Init();
         stateMachine = new FControlableActorStateMachine(this);
         moveState = new FCAMoveState(stateMachine,GetComponent<ICanMove>());
+        collectState = new FCACollectState(stateMachine,GetComponent<ICanCollect>());
         AddControlableProperties(EControlableProperties.Move);
         AddControlableProperties(EControlableProperties.Collect);
     }

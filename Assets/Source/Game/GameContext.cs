@@ -12,6 +12,7 @@ public class at
 
 public class GameContext : SingletonBase<GameContext>
 {
+    
     public FMap gameMap;
     protected override void ConstructFunction()
     {
@@ -44,5 +45,7 @@ public class GameContext : SingletonBase<GameContext>
         return Interlocked.Increment(ref ett_id);
     }
 
-    //
+    // smt save data stats ...
+    public PResourceStats resourceStats = new PResourceStats();
+
 }
