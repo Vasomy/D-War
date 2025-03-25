@@ -10,4 +10,9 @@ public class ETree : ECollectableEntity
         base.GetResource();
         GameContext.instance.resourceStats.woods++;
     }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, collectRadius);
+    }
 }

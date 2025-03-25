@@ -9,6 +9,9 @@ public class AFarmer : AControlableActor , ICanCollect,ICanMove
     float ICanCollect.iCollectForce { get; set; } = 1.0f;
     float ICanCollect.iCollectDistance { get; set; } = 0.5f;
 
+    public ICanCollect icc =>GetComponent<ICanCollect>();
+    public ICanMove icm =>GetComponent<ICanMove>();
+
     FControlableActorStateMachine stateMachine;
     FCAMoveState moveState;
     FCACollectState collectState;
@@ -39,5 +42,13 @@ public class AFarmer : AControlableActor , ICanCollect,ICanMove
         collectState = new FCACollectState(stateMachine,GetComponent<ICanCollect>());
         AddControlableProperties(EControlableProperties.Move);
         AddControlableProperties(EControlableProperties.Collect);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (icc != null)
+        {
+            Gizmos.DrawWireSphere(transform.position, icc.iCollectDistance);
+        }
     }
 }

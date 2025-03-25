@@ -16160,7 +16160,7 @@ MonoBehaviour:
   uid: 0
   ettType: 0
   rb2d: {fileID: 0}
-  collectRadius: 0.2
+  collectRadius: 0.8
   collectGap: 3
   health: 15
   cd2d: {fileID: 0}

@@ -93,8 +93,8 @@ public class FCACollectState : FControlableActorState
         base.Update();
         float tDis = target.collectRadius;
         var pPos = stateMachine.actor.transform.position;
-        var tPos = target.transform.position;
-
+        var tPos = target.transform.position; 
+        
         if(goCollect)
         {
             // do collect
@@ -110,6 +110,7 @@ public class FCACollectState : FControlableActorState
         if((pPos - tPos).magnitude<=tDis+icc.iCollectDistance)
         {
             goCollect = true;
+            MMoveSystem.CancelMoveCommand(actor);
         }
     }
 }

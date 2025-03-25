@@ -63,4 +63,6 @@ public class AControlableActor : Actor
         base.OnMouseLeftButtonDown();
         MSelectSystem.SelectEntity(this);// 也许应该放在基类实现？
     }
+
+    
 }

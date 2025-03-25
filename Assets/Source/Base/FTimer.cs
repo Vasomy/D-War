@@ -8,7 +8,6 @@ public class FTimer
     public void SetGap(float inGap)
     {
         gap = inGap;
-        sumTime = 0.0f;
     }
     public bool Timer()
 

@@ -184,6 +184,13 @@ public class FlowField
 }
 public class FlowFieldPathFinding
 {
+    /// <summary>
+    /// 该路径结束的原因是什么，
+    /// 如 最大时间到了，该路径下所有的单位有了新的寻路路径或该路径下的所有单位因为某些原因被销毁（处于非激活状态）了
+    /// 
+    /// </summary>
+    public string EndReason = "Unknow";
+
     public Vector2Int target;
     public Vector2    pointTarget;
     public FlowField flowField;
@@ -231,6 +238,7 @@ public class FlowFieldPathFinding
                 icm.iDirection = Vector2.zero;
             }
         }
+        Debug.Log("FFPF end by " + EndReason);
     }
 
     public void AddEntity(AControlableActor ett)
@@ -243,7 +251,7 @@ public class FlowFieldPathFinding
         entities.Add(ett.uid, ett);
         var node = flowField.GetNode(ett.transform.position);
         float eTime = node.fCost / icm.iSpeed;
-        expectMaxTime = Mathf.Max(eTime, expectMaxTime); ;
+        expectMaxTime = Mathf.Max(eTime, expectMaxTime);
     }
 
     public void RemoveEntity(AControlableActor ett)
@@ -275,10 +283,12 @@ public class FlowFieldPathFinding
         ettCount = entities.Count;
         if(timer.Timer())
         {
+            EndReason = "Time up!";
             return true;
         }
         if(entities.Count==0)
         {
+            EndReason = "Entities in this ffpf is 0!";
             return true;
         }
         //Debug.Log("Ett Count : "+entities.Count);

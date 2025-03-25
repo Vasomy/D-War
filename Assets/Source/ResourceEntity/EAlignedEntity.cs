@@ -30,7 +30,7 @@ public class ECollectableEntity : EAlignedEntity
     protected override void Init()
     {
         base.Init();
-        
+        timer.SetGap(collectGap);
     }
 
     public override void OnMouseRightButtonDown()
@@ -72,8 +72,9 @@ public class ECollectableEntity : EAlignedEntity
         
     }
 
-    public void DoCollect(float collectForce,float toCollectGap = 0)
+    public void DoCollect(float collectForce,float toCollectGap = 1.0f)
     {
+        timer.SetGap(toCollectGap);
         if(timer.Timer())
         {
             health -= collectForce;
@@ -82,12 +83,7 @@ public class ECollectableEntity : EAlignedEntity
         }
         else
         {
-            if(toCollectGap == 0)
-                timer.SetGap(collectGap);
-            else
-            {
-                timer.SetGap(toCollectGap);
-            }
+            
         }
     }
 }
