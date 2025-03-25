@@ -23,8 +23,7 @@ public class AControlableActor : Actor
     public FlowFieldPathFinding curFFPF = null;
     //
 
-    public Vector2 direction;
-    public float speed { private set; get; } = 3.0f;
+   
 
 
     public int ControlableProperties = (int)EControlableProperties.None;
@@ -54,8 +53,6 @@ public class AControlableActor : Actor
         {
             rb2d.velocity = Vector2.zero;
         }
-        rb2d.velocity = fDir.normalized * icm.iSpeed;
-        //Debug.Log(fDir * speed);
     }
 
     public override void OnMouseLeftButtonDown()

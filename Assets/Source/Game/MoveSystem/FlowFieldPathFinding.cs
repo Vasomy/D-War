@@ -221,6 +221,7 @@ public class FlowFieldPathFinding
                 }
                 ((AControlableActor)ett).curFFPF = this;
                 entities.Add(ett.uid,(AControlableActor)ett);
+                icm.ChangeToMoveState();
             }
         }
         timer = new FTimer();
@@ -295,17 +296,18 @@ public class FlowFieldPathFinding
         foreach(var ett in entities)
         {
             var node = flowField.GetNode(ett.Value.transform.position);
+            var icm = ett.Value.GetComponent<ICanMove>();
             if (node != target)
             {
                 Vector2 fDir = node.direction;
                 fDir = GridManager.GetPointByIndexedPos(new Vector2Int(node.x, node.y))
                     + fDir * new Vector2(flowField.gridX, flowField.gridY) / 2.0f - (Vector2)ett.Value.transform.position;
-                ett.Value.SetVelocityDirection(fDir);
+                icm.iDirection = fDir.normalized;
             }
             else
             {
                 Vector2 fDir = GridManager.GetPointByIndexedPos(target) - (Vector2)ett.Value.transform.position;
-                ett.Value.SetVelocityDirection(fDir);
+                icm.iDirection = fDir.normalized;
             }
         }
         return false;

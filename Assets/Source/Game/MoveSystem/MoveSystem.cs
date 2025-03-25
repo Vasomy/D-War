@@ -43,6 +43,7 @@ public class MMoveSystem : SingletonBase<MMoveSystem>
                 if (ett.ettType == EEntityType.Controlable)
                 {
                     var caEtt = FCast.Cast<AControlableActor>(ett);
+                    var icm = ett.GetComponent<ICanMove>();
                     if(caEtt.curFFPF == ffpfTable[target])
                     {
                         return;
@@ -58,6 +59,7 @@ public class MMoveSystem : SingletonBase<MMoveSystem>
                         caEtt.curFFPF = null;
                     }
                     ((AControlableActor)ett).curFFPF = ffpfTable[target];
+                    icm.ChangeToMoveState();
                 }
             }
         }
@@ -78,6 +80,7 @@ public class MMoveSystem : SingletonBase<MMoveSystem>
         if (FFPF != null)
         {
             FFPF.entities.Add(ett.uid, (AControlableActor)ett);
+            ett.GetComponent<ICanMove>().ChangeToMoveState();
             Debug.Log("Try move to 3");
 
         }
