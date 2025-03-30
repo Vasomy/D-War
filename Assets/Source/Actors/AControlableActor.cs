@@ -22,8 +22,14 @@ public class AControlableActor : Actor
     // path finding properites
     public FlowFieldPathFinding curFFPF = null;
     //
+    public FControlableActorStateMachine stateMachine;
+    // stop actor move & reset\clear other state's data
+    public FCAIdleState idleState;
 
-   
+    public void ChangeToIdleState()
+    {
+        stateMachine.ChangeState(idleState);
+    }
 
 
     public int ControlableProperties = (int)EControlableProperties.None;
@@ -39,6 +45,7 @@ public class AControlableActor : Actor
     protected override void Init()
     {
         base.Init();
+        rb2d.freezeRotation = true;
     }
     public override void SetType()
     {

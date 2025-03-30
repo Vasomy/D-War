@@ -122,7 +122,9 @@ public class FlowField
                 nodes = new List<List<FlowFieldNode>> ();
             else
                 nodes.Clear();
-            for(int j =0;j<=h;++j)
+            Debug.Log("BFS 0");
+
+            for (int j =0;j<=h;++j)
             {
                 nodes.Add(new List<FlowFieldNode>());
                 for(int i =0;i<=w;++i)
@@ -131,11 +133,11 @@ public class FlowField
                     node.x = i;
                     node.y = j;
                     Vector2Int key = new Vector2Int(i, j);
-                    node.IsLegal = (oG.ContainsKey(key) == false || (oG.ContainsKey(key) == true && (int)oG[key] == 0 ) );
+                    node.IsLegal = (oG.ContainsKey(key) == false || (oG.ContainsKey(key) == true && (long)oG[key] == 0L ) );
                     nodes[j].Add(node);
                 }
             }
-            
+            Debug.Log("BFS 1");
             nodes[target.y][target.x].fCost = 0;
 
             var targetNode = nodes[target.y][target.x];
@@ -175,8 +177,9 @@ public class FlowField
                     }
                 }
             }
+            Debug.Log("BFS 2");
 
-            
+
 
             //Debug.Log("FFPF Count : "+cCount);
         }
@@ -209,8 +212,10 @@ public class FlowFieldPathFinding
         entities = new Dictionary<long, AControlableActor>();
         foreach(var ett in selectedEntites)
         {
+            
             if(ett.TryGetComponent<ICanMove>(out var icm))
             {
+                Debug.Log(ett.GetType());
                 Debug.Log("To ett a ffpf");
                 var caEtt = FCast.Cast<AControlableActor>(ett);
                 if (caEtt.curFFPF != null)
@@ -221,9 +226,10 @@ public class FlowFieldPathFinding
                 }
                 ((AControlableActor)ett).curFFPF = this;
                 entities.Add(ett.uid,(AControlableActor)ett);
-                icm.ChangeToMoveState();
+                //icm.ChangeToMoveState();
             }
         }
+        Debug.Log("Nums of ett is " + entities.Count);
         timer = new FTimer();
         UpdateFlowField();
     }
@@ -238,6 +244,7 @@ public class FlowFieldPathFinding
             {
                 icm.iDirection = Vector2.zero;
             }
+            ett.Value.ChangeToIdleState();
         }
         Debug.Log("FFPF end by " + EndReason);
     }
@@ -262,7 +269,9 @@ public class FlowFieldPathFinding
 
     public void UpdateFlowField()
     {
+        Debug.Log("Begin ff update");
         flowField.Update();
+        Debug.Log("Fsh ff update");
         foreach(var ett in entities)
         {
             ett.Value.TryGetComponent<ICanMove>(out var icm);
@@ -276,7 +285,7 @@ public class FlowFieldPathFinding
             expectMaxTime = Mathf.Max(eTime,expectMaxTime);
         }
         timer.SetGap(expectMaxTime);
-        //Debug.Log("Expect Time : " + expectMaxTime);
+        Debug.Log("Expect Time : " + expectMaxTime);
     }
 
     public bool Update()

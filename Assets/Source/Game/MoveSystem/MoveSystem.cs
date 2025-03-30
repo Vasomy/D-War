@@ -37,9 +37,10 @@ public class MMoveSystem : SingletonBase<MMoveSystem>
     {
         if (ffpfTable.ContainsKey(target))
         {
-            Debug.Log("Has this ffpf!");
+           
             foreach (var ett in entities)
             {
+                Debug.Log(ett.ettType);
                 if (ett.ettType == EEntityType.Controlable)
                 {
                     var caEtt = FCast.Cast<AControlableActor>(ett);
@@ -59,7 +60,7 @@ public class MMoveSystem : SingletonBase<MMoveSystem>
                         caEtt.curFFPF = null;
                     }
                     ((AControlableActor)ett).curFFPF = ffpfTable[target];
-                    icm.ChangeToMoveState();
+                    //icm.ChangeToMoveState();
                 }
             }
         }
@@ -73,21 +74,17 @@ public class MMoveSystem : SingletonBase<MMoveSystem>
 
     public static void MoveTo(Entity ett,Vector2Int target)
     {
-        Debug.Log("Try move to 1");
         instance.ffpfTable.TryGetValue(target,out var FFPF);
-        Debug.Log("Try move to 2");
 
         if (FFPF != null)
         {
             FFPF.entities.Add(ett.uid, (AControlableActor)ett);
-            ett.GetComponent<ICanMove>().ChangeToMoveState();
-            Debug.Log("Try move to 3");
+            //ett.GetComponent<ICanMove>().ChangeToMoveState();
 
         }
         else
         {
             instance.AddFlowFieldPathFinding(target, new List<Entity>{ett});
-            Debug.Log("Try move to 4");
 
         }
     }
@@ -129,12 +126,21 @@ public class MMoveSystem : SingletonBase<MMoveSystem>
         {
             if(Input.GetMouseButtonDown(1))
             {
-                if (EventSystem.current.IsPointerOverGameObject())
+                var cd = Physics2D.OverlapPoint(CameraController.instance.GetMousePos());
+                if (cd != null)
                 {
                     return;
                 }
+                Debug.Log("S");
                 AddFlowFieldPathFinding(GridManager.GetIndexedPos(CameraController.instance.GetMousePos()),
                     MSelectSystem.instance.selectedEntity);
+                foreach(var ett in MSelectSystem.instance.selectedEntity)
+                {
+                    if(ett.TryGetComponent<ICanMove>(out var icm))
+                    {
+                        icm.ChangeToMoveState();
+                    }
+                }
                 //ffpf.Add(new FlowFieldPathFinding(MSelectSystem.instance.selectedEntity,
                 //    GridManager.GetIndexedPos(CameraController.instance.GetMousePos())
                 //    ));

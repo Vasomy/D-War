@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 public class EAlignedEntity : Entity
 {
@@ -71,8 +72,9 @@ public class ECollectableEntity : EAlignedEntity
     {
         
     }
-
-    public void DoCollect(float collectForce,float toCollectGap = 1.0f)
+    
+    public bool DoCollect(float collectForce,float toCollectGap = 1.0f)
+        // 如果完成采集 则返回 true
     {
         timer.SetGap(toCollectGap);
         if(timer.Timer())
@@ -80,11 +82,14 @@ public class ECollectableEntity : EAlignedEntity
             health -= collectForce;
             // Resource Stats -> smt += health;
             GetResource();
-        }
-        else
-        {
             
         }
+        
+        if(health>0)
+        {
+            return false;
+        }
+        return true;
     }
 }
 

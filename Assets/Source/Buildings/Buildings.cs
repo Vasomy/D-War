@@ -3,7 +3,7 @@ using UnityEngine;
 
 
 
-public class Buildings : Entity
+public class Buildings : EAlignedEntity
 {
     public string buildingName;
     public SpriteRenderer spriteRenderer;

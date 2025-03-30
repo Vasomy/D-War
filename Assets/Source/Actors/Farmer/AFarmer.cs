@@ -12,9 +12,8 @@ public class AFarmer : AControlableActor , ICanCollect,ICanMove
     public ICanCollect icc =>GetComponent<ICanCollect>();
     public ICanMove icm =>GetComponent<ICanMove>();
 
-    FControlableActorStateMachine stateMachine;
-    FCAMoveState moveState;
-    FCACollectState collectState;
+    public FCAMoveState moveState;
+    public FCACollectState collectState;
 
     protected override void OnUpdate()
     {
@@ -40,8 +39,13 @@ public class AFarmer : AControlableActor , ICanCollect,ICanMove
     {
         base.Init();
         stateMachine = new FControlableActorStateMachine(this);
+        
         moveState = new FCAMoveState(stateMachine,GetComponent<ICanMove>());
         collectState = new FCACollectState(stateMachine,GetComponent<ICanCollect>());
+        idleState = new FCAIdleState(stateMachine);
+
+        stateMachine.ChangeState(idleState);
+
         AddControlableProperties(EControlableProperties.Move);
         AddControlableProperties(EControlableProperties.Collect);
     }

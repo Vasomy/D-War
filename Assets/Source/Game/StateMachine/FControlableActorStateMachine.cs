@@ -22,6 +22,22 @@ public class FCAIdleState : FControlableActorState
     {
 
     }
+
+    public override void Begin()
+    {
+        base.Begin();
+        actor.GetComponent<ICanMove>().ZeroVeloctiy(actor.rb2d);
+    }
+
+    public override void End()
+    {
+        base.End();
+    }
+
+    public override void Update()
+    {
+        base.Update();
+    }
 }
 
 
@@ -99,7 +115,19 @@ public class FCACollectState : FControlableActorState
         {
             // do collect
             // set animation
-            target.DoCollect(icc.iCollectForce);
+            var isdone = target.DoCollect(icc.iCollectForce);
+
+            //if((pPos - tPos).magnitude > tDis + icc.iCollectDistance)
+            {
+                // stop collect
+            }
+
+            if(isdone)
+            {
+                // change to idle
+                actor.stateMachine.ChangeState(actor.idleState);
+            }
+
             return;
         }
         else
@@ -110,8 +138,10 @@ public class FCACollectState : FControlableActorState
         if((pPos - tPos).magnitude<=tDis+icc.iCollectDistance)
         {
             goCollect = true;
+            icm.ZeroVeloctiy(actor.rb2d);
             MMoveSystem.CancelMoveCommand(actor);
         }
+        
     }
 }
 

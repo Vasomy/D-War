@@ -18,6 +18,11 @@ public interface ICanMove
     {
         rb2d.velocity = iSpeed * iDirection;
     }
+
+    void ZeroVeloctiy(Rigidbody2D rb2d)
+    {
+        rb2d.velocity = Vector2.zero;
+    }
 }
 
 

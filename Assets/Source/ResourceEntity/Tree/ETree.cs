@@ -8,7 +8,7 @@ public class ETree : ECollectableEntity
     public override void GetResource()
     {
         base.GetResource();
-        GameContext.instance.resourceStats.woods++;
+        GameStats.instance.resoureStats.woods++;
     }
 
     private void OnDrawGizmos()

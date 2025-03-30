@@ -27,11 +27,15 @@ public class BProducer : Buildings
     // 找到周围一块合法的空地，生产单位，并下达移动到该处的命令
     public void Produce()
     {
+        if(curProduceNums >=maxProduceNums)
+        {
+            return;
+        }
         List<Vector2Int> cells = new List<Vector2Int>();
         var gridPos = GridManager.GetIndexedPos(transform.position);
         for(int i = -1 - lWidth;i<=1+rWidth;i++)
         {
-            for(int j = -1 - dHeight;j<1+uHeight;j++)
+            for(int j = -1 - dHeight;j<=1+uHeight;j++)
             { 
                 if (i <= rWidth && i >= -lWidth && j <= uHeight && j >= -dHeight)
                 {
@@ -50,8 +54,9 @@ public class BProducer : Buildings
             
             var rd = Random.Range(0, cells.Count);
             var gPos = GridManager.GetPointByIndexedPos(cells[rd]);
-            gPos = gPos - (Vector2)transform.position;
+            //gPos = gPos - (Vector2)transform.position;
             Instantiate(target,gPos,new Quaternion(),unitsStorge.transform);
+            curProduceNums++;
         }
 
     }
