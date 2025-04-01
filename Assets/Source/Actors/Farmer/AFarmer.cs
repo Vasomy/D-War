@@ -19,10 +19,7 @@ public class AFarmer : AControlableActor , ICanCollect,ICanMove
     {
         base.OnUpdate();
         stateMachine.Update();
-        if (stateMachine.currentState != null)
-            Debug.Log(stateMachine.currentState.ToString());
-        else
-            Debug.Log("Null state");
+        
     }
     public void ChangeToCollectState(ECollectableEntity ett)
     {

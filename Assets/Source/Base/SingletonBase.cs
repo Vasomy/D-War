@@ -10,7 +10,7 @@ public class SingletonBase<T> : MonoBehaviour where T:SingletonBase<T>
     private void Awake()
     {
         instance = (T)this;
-        Debug.Log(instance.ToString() + "'s singleton instance was initialized!");
+        //Debug.Log(instance.ToString() + "'s singleton instance was initialized!");
     }
 
     private void Start()
