@@ -12,21 +12,23 @@ public class PackedInfo
 }
 public class Page
 {
-    public static int x = 100;
-    public static int y = 100;
-    List<List<int>> indexed;
+    public const int x = 4096;
+    public const int y = 4096;
+    public static int PageSize()
+    {
+        return x * y;
+    }
+
+    //List<List<int>> indexed;
+    int[,] indexed;
     public int Count { get; private set; } = 0;
     public Page()
     {
-        indexed = new List<List<int>>(y);
-        for(int i =  0; i < indexed.Count; i++)
-        {
-            indexed[i] = new List<int>(x);
-        }
+        indexed = new int[x, y];    
     }
     public int Find(int index)
     {
-        return indexed[index / y][index % y];
+        return indexed[index / y,index%y];
     }
 
     public void Add(int index)

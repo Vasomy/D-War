@@ -10,6 +10,7 @@ public enum EEntityType
     Controlable,
     Building,
     Collectable,
+    Enemy,
 }
 
 public class Entity : MonoBehaviour , IColliderable

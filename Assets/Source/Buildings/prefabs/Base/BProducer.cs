@@ -9,6 +9,10 @@ public class BProducer : Buildings
     public int maxProduceNums = 3; // 该建筑生产的单位最多可以存在的数量
     public int curProduceNums = 0; // 该建筑生产的单位当前存活的数量
     public GameObject target = null; // 该建筑生产的目标
+    // message 完成对象池（内存池）
+    // 现在生成单位的绑定对象不再是对象的实体，而是对象实体对应的内存池
+    
+
     public float produceGap = 1.0f;
 
     public FTimer timer;
@@ -18,6 +22,7 @@ public class BProducer : Buildings
         base.Init();
         timer = new FTimer();
         timer.SetGap(produceGap);
+        
     }
     // 不应该在最低级子类覆盖
     private void Update()
@@ -55,10 +60,31 @@ public class BProducer : Buildings
             var rd = Random.Range(0, cells.Count);
             var gPos = GridManager.GetPointByIndexedPos(cells[rd]);
             //gPos = gPos - (Vector2)transform.position;
-            Instantiate(target,gPos,new Quaternion(),unitsStorge.transform);
+            //Instantiate(target,gPos,new Quaternion(),unitsStorge.transform);
+            // now we get memorypool so use it replace Instantiate
+            // OvO
+            Generate();
+
             curProduceNums++;
         }
 
     }
+    // 在子类重写，
+    // belike（BFarm） ：
+    //
+    // {
+    //      MemoryPool<what you want>.Instance().Get(/* Args */);
+    //      ....you can gen some else ett if you want
+    //      MemoryPool<what you want 2>.Instance().Get(/* Args */);
+    //      ....
+    // }
+    //
+    // 最好在封装一层，传递想要产生的类型，而不是直接调用MemoryPool方法
+    //
+    //
 
+    public virtual void Generate()
+    {
+
+    }
 }

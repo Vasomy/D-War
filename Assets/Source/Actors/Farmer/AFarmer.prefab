@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3978016825679352899}
   - component: {fileID: 3534100626398241308}
   m_Layer: 0
-  m_Name: Farmer
+  m_Name: AFarmer
   m_TagString: Entity
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

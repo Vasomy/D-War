@@ -19,6 +19,12 @@ public class BFarm : BProducer
         }
     }
 
+    public override void Generate()
+    {
+        MemoryPool<AFarmer>.Instance().Get();
+    }
+
+
     public override bool CalculateBuildingArea(Vector3 position, bool isPreview = false, bool isDelete = false)
     {
         return GridManager.CalculateOccupiedArea(uid, position,
