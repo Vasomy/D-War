@@ -17,7 +17,7 @@ public enum EControlableProperties : int
 
 
 //  可以被框选的实体，其他实体最多被点选
-public class AControlableActor : Actor
+public class AControlableActor : Actor 
 {
     // path finding properites
     public FlowFieldPathFinding curFFPF = null;
@@ -25,6 +25,17 @@ public class AControlableActor : Actor
     public FControlableActorStateMachine stateMachine;
     // stop actor move & reset\clear other state's data
     public FCAIdleState idleState;
+
+    public float health = 10.0f;
+
+    public void GetDamage(float damage)
+    {
+        health -= damage;
+        if(health < 0)
+        {
+            // free this
+        }
+    }
 
     public void ChangeToIdleState()
     {
@@ -50,6 +61,7 @@ public class AControlableActor : Actor
     public override void SetType()
     {
         ettType = EEntityType.Controlable;
+        gameObject.tag = "friendly";
     }
     public void SetVelocityDirection(Vector2 fDir)
     {

@@ -101,4 +101,13 @@ public class Entity : MonoBehaviour , IColliderable
     {
 
     }
+
+    /// <summary>
+    /// 当该实体被SetActive(true)后调用
+    /// 当该实体被通过MemoryPool<T>.Instance().Get()后调用
+    /// </summary>
+    public virtual void Enabled()
+    {
+
+    }
 }

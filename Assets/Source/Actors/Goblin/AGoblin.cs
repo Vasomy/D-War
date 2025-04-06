@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AGoblin : Actor
+// 胆小哥布林
+public class AGoblin : AControlableActor , ICanMove
 {
 
     // 作为一个哥布林，它只需要找到enemy，然后干掉enemy。
@@ -13,6 +14,10 @@ public class AGoblin : Actor
     public float GoblinAttack_Radius = 0.5f;
     public List<float> GoblinPath;
     public bool GoblinCanDo = true; // 检测哥布林是否在执行别的动作
+
+    float ICanMove.iSpeed { get; set; } = 2.0f;
+    Vector2 ICanMove.iDirection { get; set; } = Vector2.zero;
+
     void Update()
     {
         if(Goblin_Enemy ==null)
@@ -61,4 +66,8 @@ public class AGoblin : Actor
 
     }
 
+    public void ChangeToMoveState()
+    {
+        throw new NotImplementedException();
+    }
 }

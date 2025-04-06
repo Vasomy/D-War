@@ -12,7 +12,9 @@ public class at
 
 public class GameContext : SingletonBase<GameContext>
 {
-    
+    public Hashtable allBuildings = new Hashtable();
+    public Hashtable allFriendlyUnits = new Hashtable();
+
     public FMap gameMap;
     protected override void ConstructFunction()
     {

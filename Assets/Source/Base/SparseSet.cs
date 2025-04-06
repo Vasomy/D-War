@@ -12,26 +12,26 @@ public class PackedInfo
 }
 public class Page
 {
-    public const int x = 4096;
-    public const int y = 4096;
+    public const int x = 256;
+    public const int y = 256;
     public static int PageSize()
     {
         return x * y;
     }
 
     //List<List<int>> indexed;
-    int[,] indexed;
+    long[,] indexed;
     public int Count { get; private set; } = 0;
     public Page()
     {
-        indexed = new int[x, y];    
+        indexed = new long[x, y];    
     }
-    public int Find(int index)
+    public long Find(long index)
     {
         return indexed[index / y,index%y];
     }
 
-    public void Add(int index)
+    public void Add(long index)
     {
 
     }
@@ -55,9 +55,9 @@ public class TSparseSet<T> : MonoBehaviour
         page = new List<Page>();
         page.Add(new Page());
     }
-    public void Add(T t, int id)
+    public void Add(T t, long id)
     {
         packed.Add(t);
-        int pageNum = id % (Page.x * Page.y);
+        long pageNum = id % (Page.x * Page.y);
     }
 }

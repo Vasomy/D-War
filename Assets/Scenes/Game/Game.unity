@@ -16166,6 +16166,37 @@ MonoBehaviour:
   collectGap: 3
   health: 15
   cd2d: {fileID: 0}
+--- !u!1 &532732269
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 532732270}
+  m_Layer: 0
+  m_Name: FreeObjectStorge
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &532732270
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 532732269}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -43.2, y: -7.8, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &698978914
 GameObject:
   m_ObjectHideFlags: 0
@@ -16844,6 +16875,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Farm
       objectReference: {fileID: 0}
+    - target: {fileID: 213745237796927684, guid: a80efa62400392a49b273a98e1180f75,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4261326482546821590, guid: a80efa62400392a49b273a98e1180f75,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -17150,3 +17186,4 @@ SceneRoots:
   - {fileID: 1234138277}
   - {fileID: 183490027}
   - {fileID: 77658633}
+  - {fileID: 532732270}

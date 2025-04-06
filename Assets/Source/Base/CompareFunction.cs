@@ -18,6 +18,17 @@ public class CompareFunction
     {
         return Mathf.Abs(v1.x - v2.x) + Mathf.Abs(v1.y - v2.y) + Mathf.Abs(v1.z - v2.z);
     }
+
+    static public float EulerDistance(Vector2 p1, Vector2 p2)
+    {
+        return Mathf.Sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
+    }
+
+    static public float EulerDistance(Vector3 p1, Vector3 p2)
+    {
+        return Mathf.Sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y) + (p1.z - p2.z) * (p1.z - p2.z));
+    }
 }
+
 
 

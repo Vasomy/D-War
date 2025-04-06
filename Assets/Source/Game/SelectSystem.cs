@@ -60,7 +60,7 @@ public class MSelectSystem : SingletonBase<MSelectSystem>
 
     void CheckSelectEntity(Vector3 rectBeginPos, Vector3 rectEndPos)
     {
-        GameObject[] units = GameObject.FindGameObjectsWithTag("Entity");
+        GameObject[] units = GameObject.FindGameObjectsWithTag("friendly");
 
         //Vector2 leftBotPos = new Vector2(Mathf.Min(rectBeginPos.x,rectEndPos.x),Mathf.Min(rectBeginPos.y,rectEndPos.y));
         //Vector2 rightTopPos = new Vector2(Mathf.Max(rectBeginPos.x,rectEndPos.x),Mathf.Max(rectBeginPos.y,rectEndPos.y));

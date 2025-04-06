@@ -72,6 +72,11 @@ public class MMoveSystem : SingletonBase<MMoveSystem>
         }
     }
 
+    public static void MoveTo(Entity ett,Vector2 target)
+    {
+        MoveTo(ett, GridManager.GetIndexedPos(target));
+    }
+
     public static void MoveTo(Entity ett,Vector2Int target)
     {
         instance.ffpfTable.TryGetValue(target,out var FFPF);
