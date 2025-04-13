@@ -14,9 +14,8 @@ public interface ICanMove
     float iSpeed { get; set; }
     Vector2 iDirection { get; set; } // 速度方向
     void ChangeToMoveState();
-    void Move(Rigidbody2D rb2d,stats stats_)
+    void Move(Rigidbody2D rb2d)
     {
-        float
         rb2d.velocity = iSpeed * iDirection;
     }
 

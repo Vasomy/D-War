@@ -9,7 +9,7 @@ public class AGoblin : AControlableActor , ICanMove
 
     // 作为一个哥布林，它只需要找到enemy，然后干掉enemy。
 
-    public Actor Goblin_Enemy;
+    public EActor Goblin_Enemy;
     public float GoblinEnemy_Dis;
     public float GoblinAttack_Radius = 0.5f;
     public List<float> GoblinPath;
@@ -37,7 +37,7 @@ public class AGoblin : AControlableActor , ICanMove
         }
 
     }
-    public Actor FindEnemy()
+    public EActor FindEnemy()
     {
         // 寻找目标
 

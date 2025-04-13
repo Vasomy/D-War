@@ -38,7 +38,7 @@ public class Builder : SingletonBase<Builder>
                 return;
             }
             var targetPos = GridManager.AlignPoint(CameraController.instance.GetMousePos());
-            var bd = targetBd.GetComponent<Buildings>();
+            var bd = targetBd.GetComponent<EBuildings>();
 
             bool isLegal = bd.CalculateBuildingArea(targetPos,true);
 

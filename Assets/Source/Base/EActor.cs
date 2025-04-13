@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-public class Actor : Entity
+public class EActor : Entity
 {
     public SpriteRenderer spriteRenderer;
     private void Start()

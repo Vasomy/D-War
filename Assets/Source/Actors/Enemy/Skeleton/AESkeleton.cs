@@ -44,6 +44,17 @@ public class EASkeleton : AEnemyActor , ICanMove,ICanAttack
             {
                 float dis = CompareFunction.EulerDistance(ett.transform.position, transform.position);
 
+                var type = ett.GetComponent<Entity>().ettType;
+
+                if(type == EEntityType.Building)
+                {
+
+                }
+                if(type == EEntityType.Controlable)
+                {
+
+                }
+
                 if (dis <= detectRadius)
                 {
                     if (dis < maxDis)

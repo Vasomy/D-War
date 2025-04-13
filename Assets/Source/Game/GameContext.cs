@@ -22,7 +22,7 @@ public class GameContext : SingletonBase<GameContext>
         DictBuildingsPrefab = new Dictionary<string, GameObject>();
         foreach(var bd in buildingsPrefab)
         {
-            var bds = bd.GetComponent<Buildings>();
+            var bds = bd.GetComponent<EBuildings>();
             if (bds != null)
             {
                 DictBuildingsPrefab.Add(bds.buildingName, bd);

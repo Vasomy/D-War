@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // 可以生产单位的建筑
-public class BProducer : Buildings
+public class BProducer : EBuildings
 {
     static public GameObject unitsStorge => GameObject.FindWithTag("UnitStorge");// 生产单位的父transform
 

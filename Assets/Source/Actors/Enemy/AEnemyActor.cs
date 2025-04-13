@@ -29,7 +29,7 @@ using UnityEngine;
 /// 对于一些逻辑简单的单位可以不使用接口和状态机控制
 /// 
 /// </summary>
-public class AEnemyActor : Actor
+public class AEnemyActor : EActor
 {
     // 所有的enemy actor 被初始化后 添加到稀疏集中供其他类中查找
     // ? 
