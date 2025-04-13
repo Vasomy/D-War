@@ -41,27 +41,49 @@ public class MMoveSystem : SingletonBase<MMoveSystem>
             foreach (var ett in entities)
             {
                 Debug.Log(ett.ettType);
-                if (ett.ettType == EEntityType.Controlable)
+
+                if(ett.TryGetComponent<ICanMove>(out var icm))
                 {
-                    var caEtt = FCast.Cast<AControlableActor>(ett);
-                    var icm = ett.GetComponent<ICanMove>();
-                    if(caEtt.curFFPF == ffpfTable[target])
+                    if(icm.iPathFinding == ffpfTable[target])
                     {
                         return;
                     }
 
-                    if (!ffpfTable[target].entities.ContainsKey(ett.uid))
+                    if (ffpfTable[target].entities.ContainsKey(ett.uid))
                     {
-                        ffpfTable[target].entities.Add(ett.uid, (AControlableActor)ett);
+                        ffpfTable[target].entities.Add(ett.uid,ett);
                     }
-                    if(caEtt.curFFPF != null)
+
+                    if(icm.iPathFinding != null)
                     {
-                        caEtt.curFFPF.entities.Remove(caEtt.uid);
-                        caEtt.curFFPF = null;
+                        icm.iPathFinding.entities.Remove(ett.uid);
+                        icm.iPathFinding = null;
                     }
-                    ((AControlableActor)ett).curFFPF = ffpfTable[target];
-                    //icm.ChangeToMoveState();
+                    icm.iPathFinding = ffpfTable[target];
+
                 }
+
+                //if (ett.ettType == EEntityType.Controlable)
+                //{
+                //    var caEtt = FCast.Cast<AControlableActor>(ett);
+                //    var icm = ett.GetComponent<ICanMove>();
+                //    if(caEtt.curFFPF == ffpfTable[target])
+                //    {
+                //        return;
+                //    }
+
+                //    if (!ffpfTable[target].entities.ContainsKey(ett.uid))
+                //    {
+                //        ffpfTable[target].entities.Add(ett.uid, (AControlableActor)ett);
+                //    }
+                //    if(caEtt.curFFPF != null)
+                //    {
+                //        caEtt.curFFPF.entities.Remove(caEtt.uid);
+                //        caEtt.curFFPF = null;
+                //    }
+                //    ((AControlableActor)ett).curFFPF = ffpfTable[target];
+                //    //icm.ChangeToMoveState();
+                //}
             }
         }
         else
@@ -110,11 +132,14 @@ public class MMoveSystem : SingletonBase<MMoveSystem>
         }
     }
 
-    public static void CancelMoveCommand(AControlableActor cActor)
+    public static void CancelMoveCommand(Entity cActor)
     {
-        var cFFPF = cActor.curFFPF;
-        cFFPF.RemoveEntity(cActor);
-        cFFPF = null;// 置空
+        if (cActor.TryGetComponent<ICanMove>(out var icm))
+        {
+            var cFFPF = icm.iPathFinding;
+            cFFPF.RemoveEntity(cActor);
+            cFFPF = null;// 置空
+        }
     }
 
     public void DeleteFlowFiledPathFinding(Vector2Int target)

@@ -5,9 +5,11 @@ using UnityEngine;
 public class AFarmer : AControlableActor , ICanCollect,ICanMove
 {
     Vector2 ICanMove.iDirection { get; set; } = Vector2.zero;
+    FlowFieldPathFinding ICanMove.iPathFinding { get; set; } = null;
     float ICanMove.iSpeed { get; set; } = 1.0f;
     float ICanCollect.iCollectForce { get; set; } = 1.0f;
     float ICanCollect.iCollectDistance { get; set; } = 0.5f;
+
 
     public ICanCollect icc =>GetComponent<ICanCollect>();
     public ICanMove icm =>GetComponent<ICanMove>();

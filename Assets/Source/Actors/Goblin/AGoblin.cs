@@ -17,6 +17,7 @@ public class AGoblin : AControlableActor , ICanMove
 
     float ICanMove.iSpeed { get; set; } = 2.0f;
     Vector2 ICanMove.iDirection { get; set; } = Vector2.zero;
+    FlowFieldPathFinding ICanMove.iPathFinding { get; set; } = null;
 
     void Update()
     {

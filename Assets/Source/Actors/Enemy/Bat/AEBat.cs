@@ -10,24 +10,30 @@ public class AEBat : AEnemyActor , ICanMove
 {
     Vector2 ICanMove.iDirection { get; set; } = Vector2.zero;
     float ICanMove.iSpeed { get; set; } = 1.0f;
+    FlowFieldPathFinding ICanMove.iPathFinding { get; set; } = null;
+
+    public void ChangeToMoveState()
+    {
+
+    }
 
     public GameObject currentTarget = null;
 
-    public float attackRadius = 1.0;
+    public float attackRadius = 1.0f;
 
-    public float attackForce = 1;
+    public float attackForce = 1.0f;
 
-    public float attackCooldown = 1.0;
+    public float attackCooldown = 1.0f;
 
-    public float attackTimer = 0.0;
+    public float attackTimer = 0.0f;
 
-    public float disTarget = 1e9;
+    public float disTarget = 1e9f;
         
     private GameObject FindTarget()
     {
         var allFriendEtt = GameObject.FindGameObjectsWithTag("friendly");
-        float minDis = 1e9;
-        GameObject _target;
+        float minDis = 1e9f;
+        GameObject _target = null;
         foreach(var ett in allFriendEtt)
         {
             float dis  = CompareFunction.EulerDistance(ett.transform.position, transform.position);
@@ -36,7 +42,7 @@ public class AEBat : AEnemyActor , ICanMove
                 _target = ett;
             }
         }
-        reutrn _target;
+        return _target;
     }
 
     private void AttackTarget()
@@ -47,7 +53,7 @@ public class AEBat : AEnemyActor , ICanMove
             //Target decrease health
     }
 
-    public override void OnUpdate()
+    protected override void OnUpdate()
     {
         base.OnUpdate();
 
@@ -57,7 +63,7 @@ public class AEBat : AEnemyActor , ICanMove
         {
             currentTarget = FindTarget();
         }
-        disTarget = CompareFunction.EulerDistance(ett.transform.position, transform.position);
+        disTarget = CompareFunction.EulerDistance(currentTarget.transform.position, transform.position);
         if(disTarget < attackRadius)
         {
             if(attackTimer < 0.0)
@@ -72,7 +78,7 @@ public class AEBat : AEnemyActor , ICanMove
         }
     }
 
-    public override void Init()
+    protected override void Init()
     {
         base.Init();
 

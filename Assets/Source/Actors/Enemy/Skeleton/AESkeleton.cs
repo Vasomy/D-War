@@ -19,7 +19,7 @@ public class EASkeleton : AEnemyActor , ICanMove,ICanAttack
     
     Vector2 ICanMove.iDirection { get; set; } = Vector2.zero;
     float ICanMove.iSpeed { get; set; } = 1.0f;
-
+    FlowFieldPathFinding ICanMove.iPathFinding { get; set; } = null;
     float ICanAttack.iAttackForce { get; set; } = 3.0f;
     float ICanAttack.iAttackRange { get; set; } = 0.5f;
 
@@ -81,15 +81,7 @@ public class EASkeleton : AEnemyActor , ICanMove,ICanAttack
         else
         {
             float dis2CurrentTarget = CompareFunction.EulerDistance(attackTarget.transform.position,transform.position);
-            if(dis2CurrentTarget <= iAttackRange)
-            {
-
-            }
-            else
-            {
-                // move
-                //GetComponent<ICanMove>().Move(rb2d);
-            }
+            
         }
     }
 

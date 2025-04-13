@@ -13,6 +13,7 @@ public interface ICanMove
 {
     float iSpeed { get; set; }
     Vector2 iDirection { get; set; } // 速度方向
+    FlowFieldPathFinding iPathFinding { get; set; }
     void ChangeToMoveState();
     void Move(Rigidbody2D rb2d)
     {

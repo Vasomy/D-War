@@ -199,7 +199,7 @@ public class FlowFieldPathFinding
     public FlowField flowField;
     public int ettCount;
     //  dict replace list
-    public Dictionary<long, AControlableActor> entities; // entity.uid is key
+    public Dictionary<long, Entity> entities; // entity.uid is key
     //public List<AControlableActor> entities;
     public float expectMaxTime = 0.0f;// 该流场下的单位到达目的地（附近的最长时间）+ 0.5f, 该时间就是该类是生命周期
     public FTimer timer;
@@ -209,24 +209,33 @@ public class FlowFieldPathFinding
         pointTarget = GridManager.GetPointByIndexedPos(target);
         flowField = new FlowField(target);
         //entities = new List<AControlableActor>();
-        entities = new Dictionary<long, AControlableActor>();
+        entities = new Dictionary<long, Entity>();
         foreach(var ett in selectedEntites)
         {
             
             if(ett.TryGetComponent<ICanMove>(out var icm))
             {
-                Debug.Log(ett.GetType());
-                Debug.Log("To ett a ffpf");
-                var caEtt = FCast.Cast<AControlableActor>(ett);
-                if (caEtt.curFFPF != null)
-                { 
-                    Debug.Log("Has curFFPF");
-                    caEtt.curFFPF.entities.Remove(caEtt.uid);
-                    caEtt.curFFPF = null;
-                }
-                ((AControlableActor)ett).curFFPF = this;
-                entities.Add(ett.uid,(AControlableActor)ett);
+                //Debug.Log(ett.GetType());
+                //Debug.Log("To ett a ffpf");
+                //var caEtt = FCast.Cast<AControlableActor>(ett);
+                //if (caEtt.curFFPF != null)
+                //{ 
+                //    Debug.Log("Has curFFPF");
+                //    caEtt.curFFPF.entities.Remove(caEtt.uid);
+                //    caEtt.curFFPF = null;
+                //}
+                //((AControlableActor)ett).curFFPF = this;
+                //entities.Add(ett.uid,(AControlableActor)ett);
                 //icm.ChangeToMoveState();
+
+                if(icm.iPathFinding !=null)
+                {
+                    icm.iPathFinding.entities.Remove(ett.uid);
+                    icm.iPathFinding = null;
+                }
+                icm.iPathFinding = this;
+                entities.Add(ett.uid, ett);
+
             }
         }
         Debug.Log("Nums of ett is " + entities.Count);
@@ -239,17 +248,19 @@ public class FlowFieldPathFinding
         
         foreach(var ett in entities)
         {
-            ett.Value.curFFPF = null;
-            if(ett.Value.TryGetComponent<ICanMove>(out var icm))
+            if (ett.Value.TryGetComponent<ICanMove>(out var icm))
             {
+                icm.iPathFinding = null;
+                //if (ett.Value.Tr != null)
+                //{
+                //    ett.Value.iDirection = Vector2.zero;
+                //}
                 icm.iDirection = Vector2.zero;
             }
-            ett.Value.ChangeToIdleState();
         }
-        Debug.Log("FFPF end by " + EndReason);
     }
 
-    public void AddEntity(AControlableActor ett)
+    public void AddEntity(Entity ett)
     {
         ett.TryGetComponent<ICanMove>(out var icm);
         if(icm ==null)
@@ -262,7 +273,7 @@ public class FlowFieldPathFinding
         expectMaxTime = Mathf.Max(eTime, expectMaxTime);
     }
 
-    public void RemoveEntity(AControlableActor ett)
+    public void RemoveEntity(Entity ett)
     {
         entities.Remove(ett.uid);
     }
@@ -274,15 +285,17 @@ public class FlowFieldPathFinding
         Debug.Log("Fsh ff update");
         foreach(var ett in entities)
         {
-            ett.Value.TryGetComponent<ICanMove>(out var icm);
-            if (icm == null)
+            if (ett.Value == null)
             {
                 return;
             }
-            // 一个实体所在的位置的节点
-            var node = flowField.GetNode(ett.Value.transform.position);
-            float eTime = node.fCost/icm.iSpeed;
-            expectMaxTime = Mathf.Max(eTime,expectMaxTime);
+            if (ett.Value.TryGetComponent<ICanMove>(out var icm))
+            {
+                // 一个实体所在的位置的节点
+                var node = flowField.GetNode(ett.Value.transform.position);
+                float eTime = node.fCost / icm.iSpeed;
+                expectMaxTime = Mathf.Max(eTime, expectMaxTime);
+            }
         }
         timer.SetGap(expectMaxTime);
         Debug.Log("Expect Time : " + expectMaxTime);
