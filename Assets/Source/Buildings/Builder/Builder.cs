@@ -37,7 +37,7 @@ public class Builder : SingletonBase<Builder>
                 Debug.Log("Failed to find building named " +  selectedBuildingsName);
                 return;
             }
-            var targetPos = GridManager.AlignPoint(CameraController.instance.GetMousePos());
+            var targetPos = GridManager.AlignPoint(CameraController.instance.GetMousePosByRay(GridManager.instance.girdPlaneZ));
             var bd = targetBd.GetComponent<EBuildings>();
 
             bool isLegal = bd.CalculateBuildingArea(targetPos,true);

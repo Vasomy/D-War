@@ -32,6 +32,12 @@ public class ECollectableEntity : EAlignedEntity
     {
         base.Init();
         timer.SetGap(collectGap);
+
+        //  目前所有的可采集资源均为1*1大小
+        GridManager.CalculateOccupiedArea(uid, transform.position, 0, 0, 0, 0, false, false);
+
+
+
     }
 
     public override void OnMouseRightButtonDown()
@@ -39,25 +45,20 @@ public class ECollectableEntity : EAlignedEntity
         var selectedEntities = MSelectSystem.instance.selectedEntity;
         if (selectedEntities != null)
         {
-            Debug.Log("Begin to collect");
-            Debug.Log(selectedEntities.Count);
             foreach (var ett in selectedEntities)
             {
-                Debug.Log("Step : " + 1+" " + ett.ettType);
                 if (ett.ettType != EEntityType.Controlable) return;
-                Debug.Log("Step : " + 2);
                 if (((AControlableActor)ett).HasProperty(EControlableProperties.Collect) == false)
                 {
                     return;
                 }
-                Debug.Log("Step : " + 3);
 
                 var icc = ett.GetComponent<ICanCollect>();
                 if (icc != null)
                 {
-                    Debug.Log("Step : " + 4);
-
+                    
                     icc.ChangeToCollectState(this);
+                   
                 }
             }
         }
@@ -65,7 +66,7 @@ public class ECollectableEntity : EAlignedEntity
 
     public override void OnMouseLeftButtonDown()
     {
-        Debug.Log("Left TREE!!!!!!!!!!!!!!!");
+        
     }
 
     public virtual void GetResource()

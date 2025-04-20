@@ -105,9 +105,9 @@ public class MMoveSystem : SingletonBase<MMoveSystem>
 
         if (FFPF != null)
         {
-            FFPF.entities.Add(ett.uid, (AControlableActor)ett);
+            if(!FFPF.entities.ContainsKey(ett.uid))
+                FFPF.entities.Add(ett.uid,ett);
             //ett.GetComponent<ICanMove>().ChangeToMoveState();
-
         }
         else
         {
@@ -161,9 +161,27 @@ public class MMoveSystem : SingletonBase<MMoveSystem>
                 {
                     return;
                 }
-                Debug.Log("S");
-                AddFlowFieldPathFinding(GridManager.GetIndexedPos(CameraController.instance.GetMousePos()),
-                    MSelectSystem.instance.selectedEntity);
+                //Debug.Log("S");
+                Vector2 pos = new Vector2();
+                
+                var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                // {x,y,2} = origin + direction * t;
+                // oZ + dZ*t = 2;
+                // t = (2-oZ)/dZ;
+                float plane_pos_z = 0f;
+                var t = (plane_pos_z - ray.origin.z) / ray.direction.z;
+                pos.x = ray.origin.x + ray.direction.x * t;
+                pos.y = ray.origin.y + ray.direction.y * t;
+
+                var indexedPos = GridManager.GetIndexedPos(pos);
+                if(indexedPos.x < 0||indexedPos.y<0)
+                {
+                    return;
+                }
+
+                AddFlowFieldPathFinding(GridManager.GetIndexedPos(pos),
+                    MSelectSystem.instance.selectedEntity)
+                    ;
                 foreach(var ett in MSelectSystem.instance.selectedEntity)
                 {
                     if(ett.TryGetComponent<ICanMove>(out var icm))

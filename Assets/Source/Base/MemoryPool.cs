@@ -1,13 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 // 内存池，每次Instantiate Entity
 // 应该从该对象的池子里获取
-// 如生成一个农民 =>  MemoryPool<AFarmer>.instance().Get(/* Args */);
+// 如生成一个农民 =>  MonoMemoryPool<AFarmer>.instance().Get(/* Args */);
 // 注意每一个不同的单位都应该有他自己的MemoryPool
 // 所有的prefab名字应该与类名一致（非常重要！！！！！！！！！！！！！！！！！！！！）
 // 所有的prefab名字应该与类名一致（非常重要！！！！！！！！！！！！！！！！！！！！）
@@ -16,15 +16,15 @@ using UnityEngine;
 // 所有的prefab名字应该与类名一致（非常重要！！！！！！！！！！！！！！！！！！！！）
 // 所有的prefab名字应该与类名一致（非常重要！！！！！！！！！！！！！！！！！！！！）
 // 
-
-public class MemoryPool<T>
+// 生成object
+public class MonoMemoryPool<T> where T : MonoBehaviour
 {
-    static public MemoryPool<T> instance;
-    static public MemoryPool<T> Instance()
+    static public MonoMemoryPool<T> instance;
+    static public MonoMemoryPool<T> Instance()
     {
         if(instance == null)
         {
-            instance = new MemoryPool<T>();
+            instance = new MonoMemoryPool<T>();
         }
         return instance;
     }
@@ -40,14 +40,13 @@ public class MemoryPool<T>
     public Queue<GameObject> freeQueue = new Queue<GameObject>();
     // 已经被Get的对象,k
     public HashSet<GameObject> busySet = new HashSet<GameObject>();
-    public MemoryPool(int size = DefaultSize)
+    public MonoMemoryPool(int size = DefaultSize)
     {
         string prefabName = typeof(T).Name;
-        var paths = Directory.GetFiles("Assets", prefabName + ".prefab", SearchOption.AllDirectories);
-        Debug.Log(paths.Count());
-        if(paths.Count() > 0)
+        //Debug.Log(paths.Count());
+        if (GameContext.instance.allEntityPrefabsDict.ContainsKey(prefabName)) 
         {
-            Target = AssetDatabase.LoadAssetAtPath<GameObject>(paths[0]);
+            Target = GameContext.instance.allEntityPrefabsDict[prefabName];
         }
         else
         {
@@ -67,7 +66,7 @@ public class MemoryPool<T>
 
     public GameObject Get(Transform parent = null)
     {
-        Debug.Log("current fq size : "+freeCount);
+        //Debug.Log("current fq size : "+freeCount);
 
         if (parent == null)
         {
@@ -112,4 +111,47 @@ public class MemoryPool<T>
     }
 }
 
+//
+// 生成一般的类
+public class ClassMemoryPool<T>
+{
+    public static ClassMemoryPool<T> instance;
+    public const int poolSize = 10;
+    public static ClassMemoryPool<T> Instance()
+    {
+        if (instance == null)
+        {
+            instance = new ClassMemoryPool<T>();
+        }
+        return instance;
+    }
+    private Queue<T> freeQueue;
+    private Dictionary<Type, Queue<T>> freeSet;
+    private Dictionary<Type,HashSet<T>> busySet;
+    ClassMemoryPool()
+    {
+        freeQueue = new Queue<T>();
+        freeSet = new Dictionary<Type, Queue<T>>();
+        busySet = new Dictionary<Type, HashSet<T>>();
+    }
+
+    public _Ty Get<_Ty>()where _Ty:T,new()
+    {
+        if (freeSet.ContainsKey(typeof(_Ty)))
+        {
+
+        }
+        else
+        {
+            freeSet[typeof(_Ty)] = new Queue<T>();
+            
+        }
+        return default(_Ty);
+    }
+
+    private void NewOne<_Ty>()where _Ty : T , new()
+    {
+        
+    }
+}
 

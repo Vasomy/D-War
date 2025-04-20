@@ -25,6 +25,11 @@ public class FlowFieldNode
     {
         return node.x != pos.x || node.y != pos.y;
     }
+
+    public override bool Equals(object obj)
+    {
+        return this == (FlowFieldNode)obj;
+    }
 }
 
 public class FlowField
@@ -110,7 +115,7 @@ public class FlowField
         {
             int w = GridManager.instance.width;
             int h = GridManager.instance.height;
-            Debug.Log("FlowField Size : " + w + " " + h);
+           // Debug.Log("FlowField Size : " + w + " " + h);
 
             Func<int, int, bool> IsLegal = (x, y) =>
             {
@@ -122,7 +127,7 @@ public class FlowField
                 nodes = new List<List<FlowFieldNode>> ();
             else
                 nodes.Clear();
-            Debug.Log("BFS 0");
+            //Debug.Log("BFS 0");
 
             for (int j =0;j<=h;++j)
             {
@@ -137,7 +142,7 @@ public class FlowField
                     nodes[j].Add(node);
                 }
             }
-            Debug.Log("BFS 1");
+            //Debug.Log("BFS 1");
             nodes[target.y][target.x].fCost = 0;
 
             var targetNode = nodes[target.y][target.x];
@@ -177,7 +182,7 @@ public class FlowField
                     }
                 }
             }
-            Debug.Log("BFS 2");
+            //Debug.Log("BFS 2");
 
 
 
@@ -238,7 +243,7 @@ public class FlowFieldPathFinding
 
             }
         }
-        Debug.Log("Nums of ett is " + entities.Count);
+        //Debug.Log("Nums of ett is " + entities.Count);
         timer = new FTimer();
         UpdateFlowField();
     }
@@ -280,9 +285,9 @@ public class FlowFieldPathFinding
 
     public void UpdateFlowField()
     {
-        Debug.Log("Begin ff update");
+        //Debug.Log("Begin ff update");
         flowField.Update();
-        Debug.Log("Fsh ff update");
+        //Debug.Log("Fsh ff update");
         foreach(var ett in entities)
         {
             if (ett.Value == null)
@@ -298,7 +303,7 @@ public class FlowFieldPathFinding
             }
         }
         timer.SetGap(expectMaxTime);
-        Debug.Log("Expect Time : " + expectMaxTime);
+        //Debug.Log("Expect Time : " + expectMaxTime);
     }
 
     public bool Update()

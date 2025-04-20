@@ -75,7 +75,6 @@ public class Entity : MonoBehaviour , IColliderable
     {
         int key_code = Input.GetMouseButtonDown(0) == true?0:-1;
         key_code = Input.GetMouseButtonDown(1) == true?1:key_code;
-        Debug.Log(key_code);
         switch (key_code)
         {
         // left mouse button
@@ -85,6 +84,7 @@ public class Entity : MonoBehaviour , IColliderable
                     break;
             }
         case 1:
+                Debug.Log("SSSS");
                 OnMouseRightButtonDown();
             break;
         }
@@ -107,6 +107,13 @@ public class Entity : MonoBehaviour , IColliderable
     /// 当该实体被通过MemoryPool<T>.Instance().Get()后调用
     /// </summary>
     public virtual void Enabled()
+    {
+
+    }
+    ///
+    /// 当该实体被销毁，移除，死亡或者将要回到内存池中时调用
+    ///
+    public virtual void Disabled()
     {
 
     }

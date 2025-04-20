@@ -60,7 +60,7 @@ public class BuildingSprite
 
 [Serializable]
 [CreateAssetMenu(fileName = "New Building Data", menuName = "Data/New Building Data")]
-public class BuildingData
+public class BuildingData : ScriptableObject
 {
     [Header("Global Data")]
     public string buildingName;
