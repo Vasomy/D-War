@@ -6,12 +6,13 @@ using System.Linq;
 using UnityEngine;
 using static UnityEditor.Progress;
 
-public class AEBat : AEnemyActor , ICanMove
+public class AESoldier : AEnemyActor , ICanMove
 {
     ICanMove icm => GetComponent<ICanMove>();
     Vector2 ICanMove.iDirection { get; set; } = Vector2.zero;
     float ICanMove.iSpeed { get; set; } = 1.0f;
-    FlowFieldPathFinding ICanMove.iPathFinding { get; set; } = null;
+    FlowFieldPathFinding ICanMove.iPathFinding { get; set;} = null;
+
 
     public void ChangeToMoveState()
     {
@@ -20,7 +21,7 @@ public class AEBat : AEnemyActor , ICanMove
 
     public GameObject currentTarget = null;
 
-    public float attackRadius = 1.0f;
+    public float attackRadius = 2.0f;
 
     public float attackForce = 1.0f;
 
@@ -29,21 +30,40 @@ public class AEBat : AEnemyActor , ICanMove
     public float attackTimer = 0.0f;
 
     public float disTarget = 1e9f;
+
+    // 检查自身buff
+    public override void checkBuff()
+    {
+        foreach(var buff in buffs)
+        {
+            buff.timer -= Time.deltaTime;
+            if(buff.timer < 0.0f)     //buff时间到了，删除。
+            {
+                buff.BuffEnd(gameObject);
+                buffs.Remove(buff);
+            }
+            else
+            {
+                buff.Buffing(gameObject);
+            }
+        }
+    }
         
-    private GameObject FindTarget()
+    //寻找目标，谁都打
+    private void FindTarget()
     {
         var allFriendEtt = GameObject.FindGameObjectsWithTag("friendly");
         float minDis = 1e9f;
-        GameObject _target = null;
+        // GameObject fTarget = null;
         foreach(var ett in allFriendEtt)
         {
             float dis  = CompareFunction.EulerDistance(ett.transform.position, transform.position);
             if(dis < minDis)
             {
-                _target = ett;
+                currentTarget = ett;
             }
         }
-        return _target;
+        // reutrn fTarget;
     }
 
     private void AttackTarget()
@@ -52,6 +72,7 @@ public class AEBat : AEnemyActor , ICanMove
             // Animation
 
             //Target decrease health
+
     }
 
     protected override void OnUpdate()
@@ -62,11 +83,15 @@ public class AEBat : AEnemyActor , ICanMove
 
         if (currentTarget == null)
         {
-            currentTarget = FindTarget();
+            FindTarget();
+            if(currentTarget == null) return;
+            MMoveSystem.MoveTo(this, currentTarget.transform.position);
         }
         disTarget = CompareFunction.EulerDistance(currentTarget.transform.position, transform.position);
+        Debug.Log(disTarget);
         if(disTarget < attackRadius)
         {
+            Debug.Log("in soldier radius");
             if(attackTimer < 0.0)
             {
                 attackTimer  = attackCooldown;
@@ -75,8 +100,10 @@ public class AEBat : AEnemyActor , ICanMove
         }
         else
         {
+            
             MMoveSystem.MoveTo(this, currentTarget.transform.position);
             icm.Move(rb2d);
+            Debug.Log("Move");
         }
     }
 

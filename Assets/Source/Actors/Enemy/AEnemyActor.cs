@@ -4,43 +4,50 @@ using UnityEngine;
 
 
 /// <summary>
-/// ÓÐ¹ØµÐÈËµ¥Î»µÄË÷µÐÂß¼­
-/// ¶ÔÓÚÒ»°ãµÄµ¥Î»£¬µÐ·½µ¥Î»ÊÇ°´ÕÕ²¨´Î³öÏÖ£¬Ë÷µÐÂß¼­Ó¦Îª->
-/// 1.Ñ°ÕÒ×î½üµÄ½¨Öþ£¨»òÕßÊÇÍæ¼Ò¿ØÖÆµÄµ¥Î»£©->2.°´ÕÕÏßÂ·ÐÐ×ß£¬Èç¹û°´ÏßÂ·ÐÐ×ßÊ±ÔÚÒ»¶¨·¶Î§ÄÚ(Detect radius)±ãÏëÆä·¢¶¯¹¥»÷£¬
-/// ÔÚÍê³É¹¥»÷Ö¸Áîºó¼ÌÐø°´³¯ÏòÄ¿±ê½¨ÖþµÄÂ·ÏßÐÐ×ß->3.Ä¿±ê½¨ÖþÏûÊ§»Øµ½1
+/// ï¿½Ð¹Øµï¿½ï¿½Ëµï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß¼ï¿½
+/// ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Äµï¿½Î»ï¿½ï¿½ï¿½Ð·ï¿½ï¿½ï¿½Î»ï¿½Ç°ï¿½ï¿½Õ²ï¿½ï¿½Î³ï¿½ï¿½Ö£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß¼ï¿½Ó¦Îª->
+/// 1.Ñ°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¿ï¿½ï¿½ÆµÄµï¿½Î»ï¿½ï¿½->2.ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ß£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Î§ï¿½ï¿½(Detect radius)ï¿½ï¿½ï¿½ï¿½ï¿½ä·¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+/// ï¿½ï¿½ï¿½ï¿½É¹ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ê½¨ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½->3.Ä¿ï¿½ê½¨ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Øµï¿½1
 /// ------------------------------------------------------------------
 /// 
-/// Ò»Ð©×¢ÒâÊÂÏî£º
-/// ÓÑ·½µ¥Î»µÄtag ÊÇ friendly Èç¹ûÏëÒª»ñÈ¡ËùÓÐµÄÓÑ·½µ¥Î» Ê¹ÓÃ GameObject.FindWithTag("friendly");
-/// ÒÔÉÏ½¨ÒéÊ¹ÓÃÏ¡Êè¼¯»òÕß¹þÏ£±íÓÃÓÚ´æ ËùÓÐtagÎªfriendlyµÄobjects (Î´À´ÊµÏÖ)
+/// Ò»Ð©×¢ï¿½ï¿½ï¿½ï¿½ï¿½î£º
+/// ï¿½Ñ·ï¿½ï¿½ï¿½Î»ï¿½ï¿½tag ï¿½ï¿½ friendly ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½È¡ï¿½ï¿½ï¿½Ðµï¿½ï¿½Ñ·ï¿½ï¿½ï¿½Î» Ê¹ï¿½ï¿½ GameObject.FindWithTag("friendly");
+/// ï¿½ï¿½ï¿½Ï½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½Ï¡ï¿½è¼¯ï¿½ï¿½ï¿½ß¹ï¿½Ï£ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½ ï¿½ï¿½ï¿½ï¿½tagÎªfriendlyï¿½ï¿½objects (Î´ï¿½ï¿½Êµï¿½ï¿½)
 /// 
-/// Í¬Àí£¬µÐ·½µ¥Î»µÄtag Îª enemy ¿ÉÒÔÊ¹ÓÃ .FindWithTag»òÕß Í¬ÉÏµÄÊý¾Ý½á¹¹²éÑ¯
+/// Í¬ï¿½ï¿½ï¿½ï¿½ï¿½Ð·ï¿½ï¿½ï¿½Î»ï¿½ï¿½tag Îª enemy ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ .FindWithTagï¿½ï¿½ï¿½ï¿½ Í¬ï¿½Ïµï¿½ï¿½ï¿½ï¿½Ý½á¹¹ï¿½ï¿½Ñ¯
 /// ----------------------------------------------------------------
-/// ¶ÔÓÚAEnemyActorÖÐGetTargetµÄÓÅ»¯
-/// ÓÉÓÚÃ¿´Î»ñÈ¡targetÊ±ÐèÒª±éÀúÒ»±éËùÓÐµÄ¾ßÓÐfriendly TagµÄEntity£¬ºÄÊ±½Ï³¤
-/// ¿ÉÒÔ×öÒÔÏÂÓÅ»¯
-/// 1.¶ÔÓÚµØÍ¼·ÖÇø¿é£¬ÔÚµÐ·½»òÕßÓÑ·½ÎïÌåÒÆ¶¯Ê±¸üÐÂÆäÇø¿éÐÅÏ¢£¨°üÀ¨ËùÔÚÄÄ¸öÇø¿é£©£¬µ±²éÑ¯µ¥Î»Ê±£¬Èç¹ûÓÐ²éÑ¯·¶Î§£¨Detect Radius±äÁ¿£©
-/// ¿ÉÒÔ°´ÕÕÇø¿é²éÑ¯
-/// 2.ÓÉÓÚµÐ·½µ¥Î»ÊÇ°´ÕÕ²¨´Î³öÏÖ£¬Í¨³£´óÁ¿µ¥Î»¾Û¼¯ÔÚÒ»Æð£¬
-/// ¿¼ÂÇÉè¼Æ FEnemyBoundÀà£¬½«Èô¸É¸öµ¥Î»¿´×÷Ò»¸öµ¥Î»£¬ËûÃÇ¹²ÏíÒ»¸ötarget
+/// ï¿½ï¿½ï¿½ï¿½AEnemyActorï¿½ï¿½GetTargetï¿½ï¿½ï¿½Å»ï¿½
+/// ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½Î»ï¿½È¡targetÊ±ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ÐµÄ¾ï¿½ï¿½ï¿½friendly Tagï¿½ï¿½Entityï¿½ï¿½ï¿½ï¿½Ê±ï¿½Ï³ï¿½
+/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å»ï¿½
+/// 1.ï¿½ï¿½ï¿½Úµï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½é£¬ï¿½ÚµÐ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½ï¿½é£©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¯ï¿½ï¿½Î»Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð²ï¿½Ñ¯ï¿½ï¿½Î§ï¿½ï¿½Detect Radiusï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+/// ï¿½ï¿½ï¿½Ô°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¯
+/// 2.ï¿½ï¿½ï¿½ÚµÐ·ï¿½ï¿½ï¿½Î»ï¿½Ç°ï¿½ï¿½Õ²ï¿½ï¿½Î³ï¿½ï¿½Ö£ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½Û¼ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
+/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ FEnemyBoundï¿½à£¬ï¿½ï¿½ï¿½ï¿½ï¿½É¸ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½Ç¹ï¿½ï¿½ï¿½Ò»ï¿½ï¿½target
 /// 
 /// -----------------------------------------------------------------
 /// 
-/// ¶ÔÓÚÒ»Ð©Âß¼­¼òµ¥µÄµ¥Î»¿ÉÒÔ²»Ê¹ÓÃ½Ó¿ÚºÍ×´Ì¬»ú¿ØÖÆ
+/// ï¿½ï¿½ï¿½ï¿½Ò»Ð©ï¿½ß¼ï¿½ï¿½òµ¥µÄµï¿½Î»ï¿½ï¿½ï¿½Ô²ï¿½Ê¹ï¿½Ã½Ó¿Úºï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 /// 
 /// </summary>
 public class AEnemyActor : EActor
 {
-    // ËùÓÐµÄenemy actor ±»³õÊ¼»¯ºó Ìí¼Óµ½Ï¡Êè¼¯ÖÐ¹©ÆäËûÀàÖÐ²éÕÒ
+    // ï¿½ï¿½ï¿½Ðµï¿½enemy actor ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Óµï¿½Ï¡ï¿½è¼¯ï¿½Ð¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð²ï¿½ï¿½ï¿½
     // ? 
     //public static TSparseSet<AEnemyActor> actors = new TSparseSet<AEnemyActor>();
 
-    public GameObject target; // Ä¿±êµ¥Î»
-    public bool isInBound = false; // ÊÇ·ñÔÚÒ»¸öBoundÖÐ£¬ÈôÔÚ£¬ÔòtargetÓÉ¸ÃBoundÉèÖÃ
+    public GameObject target; // Ä¿ï¿½êµ¥Î»
+    public bool isInBound = false; // ï¿½Ç·ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Boundï¿½Ð£ï¿½ï¿½ï¿½ï¿½Ú£ï¿½ï¿½ï¿½targetï¿½É¸ï¿½Boundï¿½ï¿½ï¿½ï¿½
     
+     public List<Buff> buffs;
+
+    // ï¿½Ð¶ï¿½buff
+    public virtual void checkBuff()
+    {
+
+    }
     //
     /// <GetTarget>
-    /// ¸Ãµ¥Î»»ñÈ¡Ä¿±êµÄÂß¼­£¬Ó¦¸ÃÔÚÄ¿±ê±»Éú³Éºó£¬»òÕßÄ¿±êÏûÊ§ºóµ÷ÓÃ
+    /// ï¿½Ãµï¿½Î»ï¿½ï¿½È¡Ä¿ï¿½ï¿½ï¿½ï¿½ß¼ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ê±»ï¿½ï¿½ï¿½Éºó£¬»ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </GetTarget>
     public virtual void GetTarget()
     {
@@ -48,8 +55,8 @@ public class AEnemyActor : EActor
     }
 
     // -----
-    // ÒÔÏÂ·½·¨¼Ì³ÐÓÚActor | Entity
-    // ²»ÍÆ¼öÔÚ×ÓÀàÖÐÖØÐ´
+    // ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½Ì³ï¿½ï¿½ï¿½Actor | Entity
+    // ï¿½ï¿½ï¿½Æ¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´
     public override void Enabled()
     {
         base.Enabled();
