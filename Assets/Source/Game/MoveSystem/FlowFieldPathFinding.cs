@@ -16,7 +16,9 @@ public class FlowFieldNode
     public bool IsLegal = true; // 能通过则为true
     public float cost = 1;// 通过该区域的代价，通常为1若有减速效果则变得更大
     public float fCost = int.MaxValue;// 到达目前区域的总代价
-    public Vector2Int direction = new Vector2Int();// 当前node指向的方向
+    public Vector2 direction = new Vector2Int();// 当前node指向的方向
+
+    public Vector2Int indexedPos => new Vector2Int(x, y);
     public static bool operator ==(FlowFieldNode node,Vector2Int pos)
     {
         return node.x==pos.x && node.y==pos.y;
@@ -24,6 +26,11 @@ public class FlowFieldNode
     public static bool operator !=(FlowFieldNode node, Vector2Int pos)
     {
         return node.x != pos.x || node.y != pos.y;
+    }
+
+    public override bool Equals(object obj)
+    {
+        return this == (FlowFieldNode)obj;
     }
 }
 
@@ -37,7 +44,8 @@ public class FlowField
 
     public FlowField(Vector2Int inTarget)
     {
-
+        gridX = GridManager.instance.XStep;
+        gridY = GridManager.instance.YStep;
         target = inTarget;
     }
 
@@ -110,7 +118,7 @@ public class FlowField
         {
             int w = GridManager.instance.width;
             int h = GridManager.instance.height;
-            Debug.Log("FlowField Size : " + w + " " + h);
+           // Debug.Log("FlowField Size : " + w + " " + h);
 
             Func<int, int, bool> IsLegal = (x, y) =>
             {
@@ -122,7 +130,7 @@ public class FlowField
                 nodes = new List<List<FlowFieldNode>> ();
             else
                 nodes.Clear();
-            Debug.Log("BFS 0");
+            //Debug.Log("BFS 0");
 
             for (int j =0;j<=h;++j)
             {
@@ -137,7 +145,7 @@ public class FlowField
                     nodes[j].Add(node);
                 }
             }
-            Debug.Log("BFS 1");
+            //Debug.Log("BFS 1");
             nodes[target.y][target.x].fCost = 0;
 
             var targetNode = nodes[target.y][target.x];
@@ -164,6 +172,9 @@ public class FlowField
                         var nearNode = nodes[nY][nX];
                         
                         float cDis = Mathf.Sqrt(i*i+ j*j) + topNode.fCost;
+
+                        var uid = GridManager.GetPosID(nearNode.indexedPos);
+                        if (uid != 0) continue;
                         if (nearNode.used) continue;
                         if (cDis < nearNode.fCost)
                         {
@@ -177,7 +188,7 @@ public class FlowField
                     }
                 }
             }
-            Debug.Log("BFS 2");
+            //Debug.Log("BFS 2");
 
 
 
@@ -238,7 +249,7 @@ public class FlowFieldPathFinding
 
             }
         }
-        Debug.Log("Nums of ett is " + entities.Count);
+        //Debug.Log("Nums of ett is " + entities.Count);
         timer = new FTimer();
         UpdateFlowField();
     }
@@ -280,9 +291,9 @@ public class FlowFieldPathFinding
 
     public void UpdateFlowField()
     {
-        Debug.Log("Begin ff update");
+        //Debug.Log("Begin ff update");
         flowField.Update();
-        Debug.Log("Fsh ff update");
+        //Debug.Log("Fsh ff update");
         foreach(var ett in entities)
         {
             if (ett.Value == null)
@@ -322,9 +333,14 @@ public class FlowFieldPathFinding
             if (node != target)
             {
                 Vector2 fDir = node.direction;
-                fDir = GridManager.GetPointByIndexedPos(new Vector2Int(node.x, node.y))
-                    + fDir * new Vector2(flowField.gridX, flowField.gridY) / 2.0f - (Vector2)ett.Value.transform.position;
+                Vector2 point = GridManager.GetPointByIndexedPos(new Vector2Int(node.x, node.y)); // 1st item
+                Vector2 targetPoint = fDir * new Vector2(flowField.gridX, flowField.gridY) / 2.0f;
+                Vector2 ettPos = ett.Value.transform.position;
+                fDir = point
+                    + targetPoint
+                    - ettPos;
                 icm.iDirection = fDir.normalized;
+                
             }
             else
             {

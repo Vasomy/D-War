@@ -90,10 +90,8 @@ public class FCACollectState : FControlableActorState
     public override void Begin()
     {
         base.Begin();
-        Debug.Log("wt go to move");
-        
+
         MMoveSystem.MoveTo(stateMachine.actor, target.indexedPos);
-        Debug.Log("finish wt go to move");
         icm = stateMachine.actor.GetComponent<ICanMove>();
     }
 
@@ -121,7 +119,7 @@ public class FCACollectState : FControlableActorState
             {
                 // stop collect
             }
-
+            Debug.Log("collecting!");
             if(isdone)
             {
                 // change to idle
@@ -140,6 +138,7 @@ public class FCACollectState : FControlableActorState
             goCollect = true;
             icm.ZeroVeloctiy(actor.rb2d);
             MMoveSystem.CancelMoveCommand(actor);
+            Debug.Log("In Radius!");
         }
         
     }

@@ -1,10 +1,7 @@
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
+
 using UnityEngine;
-using static UnityEditor.Progress;
+
 
 public class AEBat : AEnemyActor , ICanMove
 {

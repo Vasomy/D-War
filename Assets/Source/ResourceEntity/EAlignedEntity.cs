@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+// 静态实体
 public class EAlignedEntity : Entity
 {
     static bool NeedAlign = true;
@@ -18,7 +19,21 @@ public class EAlignedEntity : Entity
     }
 }
 
-public class ECollectableEntity : EAlignedEntity
+public class EStaticAlignedEntity : EAlignedEntity
+{
+    // 左宽，右宽，上高，下高
+    public int lw, rw, th, dh;
+    protected override void Init()
+    {
+        base.Init();
+    }
+    public override void SetType()
+    {
+        gameObject.tag = "static";
+    }
+}
+
+public class ECollectableEntity : EStaticAlignedEntity
 {
     public float collectRadius = 0.5f;
     public float collectGap = 3.0f;
@@ -27,11 +42,16 @@ public class ECollectableEntity : EAlignedEntity
     public override void SetType()
     {
         ettType = EEntityType.Collectable;
+        
     }
     protected override void Init()
     {
         base.Init();
         timer.SetGap(collectGap);
+
+        //  目前所有的可采集资源均为1*1大小
+        GridManager.CalculateOccupiedArea(uid, transform.position, lw, rw, th, dh, false, false);
+
     }
 
     public override void OnMouseRightButtonDown()
@@ -39,25 +59,20 @@ public class ECollectableEntity : EAlignedEntity
         var selectedEntities = MSelectSystem.instance.selectedEntity;
         if (selectedEntities != null)
         {
-            Debug.Log("Begin to collect");
-            Debug.Log(selectedEntities.Count);
             foreach (var ett in selectedEntities)
             {
-                Debug.Log("Step : " + 1+" " + ett.ettType);
                 if (ett.ettType != EEntityType.Controlable) return;
-                Debug.Log("Step : " + 2);
                 if (((AControlableActor)ett).HasProperty(EControlableProperties.Collect) == false)
                 {
                     return;
                 }
-                Debug.Log("Step : " + 3);
 
                 var icc = ett.GetComponent<ICanCollect>();
                 if (icc != null)
                 {
-                    Debug.Log("Step : " + 4);
-
+                    
                     icc.ChangeToCollectState(this);
+                   
                 }
             }
         }
@@ -65,7 +80,7 @@ public class ECollectableEntity : EAlignedEntity
 
     public override void OnMouseLeftButtonDown()
     {
-        Debug.Log("Left TREE!!!!!!!!!!!!!!!");
+        
     }
 
     public virtual void GetResource()

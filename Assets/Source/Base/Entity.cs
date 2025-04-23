@@ -52,6 +52,9 @@ public class Entity : MonoBehaviour , IColliderable
         OnUpdate();
     }
 
+    /// <summary>
+    /// 设置EEntityType属性和object的标签
+    /// </summary>
     public virtual void SetType()
     {
         ettType = EEntityType.Entity;
@@ -68,14 +71,32 @@ public class Entity : MonoBehaviour , IColliderable
         uid = GameContext.instance.GetId();
         rb2d = GetComponent<Rigidbody2D>();
         SetType();
+
+        ///
+        ///
+        switch (gameObject.tag)
+        
+        {
+            case "friendly":
+                FWorld.currentWorld.RegisterFriendlyEntity(this);
+                break;
+            case "enemy":
+                FWorld.currentWorld.RegisterEnemyEntity(this);
+                break;
+            case "static":
+                FWorld.currentWorld.RegisterStaticEntity(this);
+                break;
+            default:
+                break;
+        }
+
     }
 
-   
+
     private void OnMouseOver()
     {
         int key_code = Input.GetMouseButtonDown(0) == true?0:-1;
         key_code = Input.GetMouseButtonDown(1) == true?1:key_code;
-        Debug.Log(key_code);
         switch (key_code)
         {
         // left mouse button
@@ -85,6 +106,7 @@ public class Entity : MonoBehaviour , IColliderable
                     break;
             }
         case 1:
+                //Debug.Log("SSSS");
                 OnMouseRightButtonDown();
             break;
         }
@@ -107,6 +129,13 @@ public class Entity : MonoBehaviour , IColliderable
     /// 当该实体被通过MemoryPool<T>.Instance().Get()后调用
     /// </summary>
     public virtual void Enabled()
+    {
+
+    }
+    ///
+    /// 当该实体被销毁，移除，死亡或者将要回到内存池中时调用
+    ///
+    public virtual void Disabled()
     {
 
     }

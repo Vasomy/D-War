@@ -29,14 +29,30 @@ public class GameContext : SingletonBase<GameContext>
             }
         }
         
-        
+        allEntityPrefabsDict = new Dictionary<string, GameObject>();
+        foreach(var prefab in  allEntityPrefabs)
+        {
+            allEntityPrefabsDict.Add(prefab.name, prefab);
+        }
         
     }
     // player stats info
 
     // player unlocked buildings 
     public List<GameObject> buildingsPrefab;
-    public Dictionary<string , GameObject> DictBuildingsPrefab; 
+    public Dictionary<string , GameObject> DictBuildingsPrefab;
+
+    // 非静态实体
+    // 所有的prefab的名字应该为其所挂载的主体类，如农民的prefab名字应该为AFarmer 等同于类名 AFarmer
+    public List<GameObject> allEntityPrefabs;
+    public Dictionary<string, GameObject> allEntityPrefabsDict;
+
+    // static entity
+    // 场景物体 可以采集的资源，实体墙壁，地块
+    // 可以在地图场景编辑器里面使用
+    public List<GameObject> staticEntityPrefab;
+    public Dictionary<string,GameObject> staticEntityDictPrefab;
+    
 
     // some global data in a game save
     private long ett_id = 0;

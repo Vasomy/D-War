@@ -7,7 +7,7 @@ using UnityEngine.Rendering.VirtualTexturing;
 // 不再是单例，而是每一个FMap : Mono 都有一个GridManager
 public class GridManager : SingletonBase<GridManager>
 {
-
+    public float girdPlaneZ = 0.0f;
     
     // override func
     protected override void ConstructFunction() 
@@ -19,8 +19,9 @@ public class GridManager : SingletonBase<GridManager>
     protected override void OnUpdate()
     {
         base.OnUpdate();
-        cursorOnGirdX = GetPos(CameraController.instance.GetMousePos()).x;
-        cursorOnGirdY = GetPos(CameraController.instance.GetMousePos()).y;
+        cursorOnGirdX = GetPos(CameraController.instance.GetMousePosByRay(0)).x;
+        cursorOnGirdY = GetPos(CameraController.instance.GetMousePosByRay(0)).y;
+        //CameraController.instance.text.text = cursorOnGirdX.ToString() +" , "+ cursorOnGirdY.ToString();
     }
 
     // static function
@@ -247,7 +248,17 @@ public class GridManager : SingletonBase<GridManager>
                     Gizmos.color = color;
                 }
 
-                Gizmos.DrawWireCube(point, Vector3.one * XStep);
+                //Gizmos.DrawWireCube(point, Vector3.one * XStep);
+
+                var lt = new Vector2(point.x + XStep / 2.0f, point.y + YStep / 2.0f);
+                var rt = new Vector2(point.x - XStep / 2.0f, point.y + YStep / 2.0f);
+                var rd = new Vector2(point.x - XStep / 2.0f, point.y - YStep / 2.0f);
+                var ld = new Vector2(point.x + XStep / 2.0f, point.y - YStep / 2.0f);
+
+                Gizmos.DrawLine(lt, rt);
+                Gizmos.DrawLine(rt, rd);
+                Gizmos.DrawLine(rd, ld);
+                Gizmos.DrawLine(ld, lt);
 
             }
         }
