@@ -173,6 +173,8 @@ public class MMoveSystem : SingletonBase<MMoveSystem>
                 pos.x = ray.origin.x + ray.direction.x * t;
                 pos.y = ray.origin.y + ray.direction.y * t;
 
+                CameraController.instance.text.text = pos.ToString();
+
                 var indexedPos = GridManager.GetIndexedPos(pos);
                 if(indexedPos.x < 0||indexedPos.y<0)
                 {

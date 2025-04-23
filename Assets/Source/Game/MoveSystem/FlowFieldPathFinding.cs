@@ -16,7 +16,9 @@ public class FlowFieldNode
     public bool IsLegal = true; // 能通过则为true
     public float cost = 1;// 通过该区域的代价，通常为1若有减速效果则变得更大
     public float fCost = int.MaxValue;// 到达目前区域的总代价
-    public Vector2Int direction = new Vector2Int();// 当前node指向的方向
+    public Vector2 direction = new Vector2Int();// 当前node指向的方向
+
+    public Vector2Int indexedPos => new Vector2Int(x, y);
     public static bool operator ==(FlowFieldNode node,Vector2Int pos)
     {
         return node.x==pos.x && node.y==pos.y;
@@ -42,7 +44,8 @@ public class FlowField
 
     public FlowField(Vector2Int inTarget)
     {
-
+        gridX = GridManager.instance.XStep;
+        gridY = GridManager.instance.YStep;
         target = inTarget;
     }
 
@@ -169,6 +172,9 @@ public class FlowField
                         var nearNode = nodes[nY][nX];
                         
                         float cDis = Mathf.Sqrt(i*i+ j*j) + topNode.fCost;
+
+                        var uid = GridManager.GetPosID(nearNode.indexedPos);
+                        if (uid != 0) continue;
                         if (nearNode.used) continue;
                         if (cDis < nearNode.fCost)
                         {
@@ -303,7 +309,7 @@ public class FlowFieldPathFinding
             }
         }
         timer.SetGap(expectMaxTime);
-        //Debug.Log("Expect Time : " + expectMaxTime);
+        Debug.Log("Expect Time : " + expectMaxTime);
     }
 
     public bool Update()
@@ -327,9 +333,14 @@ public class FlowFieldPathFinding
             if (node != target)
             {
                 Vector2 fDir = node.direction;
-                fDir = GridManager.GetPointByIndexedPos(new Vector2Int(node.x, node.y))
-                    + fDir * new Vector2(flowField.gridX, flowField.gridY) / 2.0f - (Vector2)ett.Value.transform.position;
+                Vector2 point = GridManager.GetPointByIndexedPos(new Vector2Int(node.x, node.y)); // 1st item
+                Vector2 targetPoint = fDir * new Vector2(flowField.gridX, flowField.gridY) / 2.0f;
+                Vector2 ettPos = ett.Value.transform.position;
+                fDir = point
+                    + targetPoint
+                    - ettPos;
                 icm.iDirection = fDir.normalized;
+                
             }
             else
             {

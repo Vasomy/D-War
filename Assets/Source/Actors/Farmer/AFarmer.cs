@@ -21,7 +21,7 @@ public class AFarmer : AControlableActor , ICanCollect,ICanMove
     {
         base.OnUpdate();
         stateMachine.Update();
-        Debug.Log(stateMachine.currentState.ToString());
+        //Debug.Log(stateMachine.currentState.ToString());
     }
     public void ChangeToCollectState(ECollectableEntity ett)
     {

@@ -33,7 +33,7 @@ public class FCommandManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        Debug.Log("Late Update!");
+        //Debug.Log("Late Update!");
         if(EnumOperator.HasEnum(rightCommand,ECommandType.eCollect))
         {
 

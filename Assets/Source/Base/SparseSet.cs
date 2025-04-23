@@ -12,8 +12,10 @@ public class PackedInfo
 }
 public class Page
 {
-    public const int x = 256;
-    public const int y = 256;
+    public int idx = 0;
+
+    public const int x = 512;
+    public const int y = 512;
     public static int PageSize()
     {
         return x * y;
@@ -28,12 +30,14 @@ public class Page
     }
     public long Find(long index)
     {
-        return indexed[index / y,index%y];
+        return indexed[index % y,index/y];
     }
 
     public void Add(long index)
     {
-
+        long ix = index % Page.y;
+        long iy = index / Page.y;
+        indexed[ix, iy] = index;
     }
 
     public bool IsFull()
@@ -43,21 +47,28 @@ public class Page
 }
 public class TSparseSet<T> : MonoBehaviour
 {
-    private List<T> packed;
+    public List<T> packed { get; private set; }
     [SerializeField]
     private List<PackedInfo> packedInfo;
-    private List<Page> page;
+    private Page page;
 
     private void Start()
     {
         packed = new List<T>();
         packedInfo = new List<PackedInfo>();
-        page = new List<Page>();
-        page.Add(new Page());
+        page = new Page();
     }
     public void Add(T t, long id)
     {
         packed.Add(t);
-        long pageNum = id % (Page.x * Page.y);
+        int backIdx = packed.Count - 1;
+        page.Add(id);
+
+    }
+
+    public T Find(long id)
+    {
+        long index = page.Find(id);
+        return packed[(int)index];
     }
 }

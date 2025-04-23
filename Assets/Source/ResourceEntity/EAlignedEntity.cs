@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+// 静态实体
 public class EAlignedEntity : Entity
 {
     static bool NeedAlign = true;
@@ -18,7 +19,21 @@ public class EAlignedEntity : Entity
     }
 }
 
-public class ECollectableEntity : EAlignedEntity
+public class EStaticAlignedEntity : EAlignedEntity
+{
+    // 左宽，右宽，上高，下高
+    public int lw, rw, th, dh;
+    protected override void Init()
+    {
+        base.Init();
+    }
+    public override void SetType()
+    {
+        gameObject.tag = "static";
+    }
+}
+
+public class ECollectableEntity : EStaticAlignedEntity
 {
     public float collectRadius = 0.5f;
     public float collectGap = 3.0f;
@@ -27,6 +42,7 @@ public class ECollectableEntity : EAlignedEntity
     public override void SetType()
     {
         ettType = EEntityType.Collectable;
+        
     }
     protected override void Init()
     {
@@ -34,9 +50,7 @@ public class ECollectableEntity : EAlignedEntity
         timer.SetGap(collectGap);
 
         //  目前所有的可采集资源均为1*1大小
-        GridManager.CalculateOccupiedArea(uid, transform.position, 0, 0, 0, 0, false, false);
-
-
+        GridManager.CalculateOccupiedArea(uid, transform.position, lw, rw, th, dh, false, false);
 
     }
 

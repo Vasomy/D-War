@@ -21,7 +21,7 @@ public class GridManager : SingletonBase<GridManager>
         base.OnUpdate();
         cursorOnGirdX = GetPos(CameraController.instance.GetMousePosByRay(0)).x;
         cursorOnGirdY = GetPos(CameraController.instance.GetMousePosByRay(0)).y;
-        CameraController.instance.text.text = cursorOnGirdX.ToString() +" , "+ cursorOnGirdY.ToString();
+        //CameraController.instance.text.text = cursorOnGirdX.ToString() +" , "+ cursorOnGirdY.ToString();
     }
 
     // static function

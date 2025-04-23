@@ -9,7 +9,7 @@ public class ETree : ECollectableEntity
     {
         base.Init();
         var nam = typeof(ETree).Name;
-        Debug.Log(nam);
+        //Debug.Log(nam);
     }
     public override void GetResource()
     {
