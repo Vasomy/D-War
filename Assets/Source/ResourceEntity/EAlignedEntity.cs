@@ -59,22 +59,10 @@ public class ECollectableEntity : EStaticAlignedEntity
         var selectedEntities = MSelectSystem.instance.selectedEntity;
         if (selectedEntities != null)
         {
-            foreach (var ett in selectedEntities)
-            {
-                if (ett.ettType != EEntityType.Controlable) return;
-                if (((AControlableActor)ett).HasProperty(EControlableProperties.Collect) == false)
-                {
-                    return;
-                }
+            // signal collect command
+            FCommandManager.Instance().SignalCollectCommand(this);
 
-                var icc = ett.GetComponent<ICanCollect>();
-                if (icc != null)
-                {
-                    
-                    icc.ChangeToCollectState(this);
-                   
-                }
-            }
+            
         }
     }
 
@@ -102,9 +90,16 @@ public class ECollectableEntity : EStaticAlignedEntity
         
         if(health>0)
         {
+            // go die
             return false;
         }
+        Destory();
         return true;
+    }
+
+    public virtual void Destory()
+    {
+
     }
 }
 

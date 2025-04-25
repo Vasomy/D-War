@@ -11,18 +11,20 @@ public class SingletonBase<T> : MonoBehaviour where T:SingletonBase<T>
     {
         instance = (T)this;
         //Debug.Log(instance.ToString() + "'s singleton instance was initialized!");
+        ConstructFunction();
     }
 
     private void Start()
     {
-        ConstructFunction();
     }
 
     private void Update()
     {
         OnUpdate();
     }
-
+    /// <summary>
+    /// 在Awake中调用
+    /// </summary>
     protected virtual void ConstructFunction()
     {
 

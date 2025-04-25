@@ -7,7 +7,11 @@ public class FWorld : MonoBehaviour
     static public FWorld currentWorld;
     private void Awake()
     {
-        currentWorld = this; 
+        currentWorld = this;
+
+        friendlyEntity = new TSparseSet<Entity>();
+        enemyEntity = new TSparseSet<Entity>();
+        staticEntity = new TSparseSet<Entity>();
     }
 
     public TSparseSet<Entity> friendlyEntity;

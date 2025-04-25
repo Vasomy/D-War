@@ -21,7 +21,7 @@ public class BFarm : BProducer
 
     public override void Generate()
     {
-        MonoMemoryPool<AFarmer>.Instance().Get();
+        EntityMemoryPool<AFarmer>.Instance().Get();
     }
 
 

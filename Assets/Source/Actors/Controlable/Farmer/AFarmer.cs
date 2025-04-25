@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AFarmer : AControlableActor , ICanCollect,ICanMove
+public class AFarmer : AControlableActor, ICanCollect, ICanMove
 {
     Vector2 ICanMove.iDirection { get; set; } = Vector2.zero;
     FlowFieldPathFinding ICanMove.iPathFinding { get; set; } = null;
@@ -11,8 +11,8 @@ public class AFarmer : AControlableActor , ICanCollect,ICanMove
     float ICanCollect.iCollectDistance { get; set; } = 0.5f;
 
 
-    public ICanCollect icc =>GetComponent<ICanCollect>();
-    public ICanMove icm =>GetComponent<ICanMove>();
+    public ICanCollect icc => GetComponent<ICanCollect>();
+    public ICanMove icm => GetComponent<ICanMove>();
 
     public FCAMoveState moveState;
     public FCACollectState collectState;
@@ -38,9 +38,9 @@ public class AFarmer : AControlableActor , ICanCollect,ICanMove
     {
         base.Init();
         stateMachine = new FControlableActorStateMachine(this);
-        
-        moveState = new FCAMoveState(stateMachine,GetComponent<ICanMove>());
-        collectState = new FCACollectState(stateMachine,GetComponent<ICanCollect>());
+
+        moveState = new FCAMoveState(stateMachine, GetComponent<ICanMove>());
+        collectState = new FCACollectState(stateMachine, GetComponent<ICanCollect>());
         idleState = new FCAIdleState(stateMachine);
 
         stateMachine.ChangeState(idleState);

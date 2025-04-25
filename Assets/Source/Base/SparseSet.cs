@@ -45,14 +45,14 @@ public class Page
         return Count == x * y;
     }
 }
-public class TSparseSet<T> : MonoBehaviour
+public class TSparseSet<T>
 {
     public List<T> packed { get; private set; }
     [SerializeField]
     private List<PackedInfo> packedInfo;
     private Page page;
 
-    private void Start()
+    public TSparseSet()
     {
         packed = new List<T>();
         packedInfo = new List<PackedInfo>();

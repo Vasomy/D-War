@@ -148,7 +148,8 @@ public class GridManager : SingletonBase<GridManager>
                     }
                     else
                     {
-                        occupiedGrid[cur] = 0;
+                        //occupiedGrid[cur] = 0;
+                        occupiedGrid.Remove(cur);
                     }
                 }
             }

@@ -161,6 +161,9 @@ public class MMoveSystem : SingletonBase<MMoveSystem>
                 {
                     return;
                 }
+                FCommandManager.Instance().SignalCommand(ERightCommandType.eMove);
+
+                return;
                 //Debug.Log("S");
                 Vector2 pos = new Vector2();
                 
@@ -173,7 +176,7 @@ public class MMoveSystem : SingletonBase<MMoveSystem>
                 pos.x = ray.origin.x + ray.direction.x * t;
                 pos.y = ray.origin.y + ray.direction.y * t;
 
-                CameraController.instance.text.text = pos.ToString();
+                //CameraController.instance.text.text = pos.ToString();
 
                 var indexedPos = GridManager.GetIndexedPos(pos);
                 if(indexedPos.x < 0||indexedPos.y<0)
@@ -181,12 +184,15 @@ public class MMoveSystem : SingletonBase<MMoveSystem>
                     return;
                 }
 
+                /// signal a move command
+
+
                 AddFlowFieldPathFinding(GridManager.GetIndexedPos(pos),
                     MSelectSystem.instance.selectedEntity)
                     ;
-                foreach(var ett in MSelectSystem.instance.selectedEntity)
+                foreach (var ett in MSelectSystem.instance.selectedEntity)
                 {
-                    if(ett.TryGetComponent<ICanMove>(out var icm))
+                    if (ett.TryGetComponent<ICanMove>(out var icm))
                     {
                         icm.ChangeToMoveState();
                     }

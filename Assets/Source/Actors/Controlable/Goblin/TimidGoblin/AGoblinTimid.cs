@@ -25,6 +25,10 @@ public class AGoblinTimid : AControlableActor, ICanMove
     public bool isFleeing = false;
 
     public GameObject fleeDirection;
+    /// <JudgeFlee>
+    /// 这里的逻辑应该是，受到伤害后，生命值小于一半，
+    /// 然后有50%几率逃跑
+    /// </JudgeFlee>
     public void JudgeFlee()
     {
         if(currentHealth <= maxHealth/2)
@@ -35,6 +39,17 @@ public class AGoblinTimid : AControlableActor, ICanMove
 
     public void Flee()
     {
+        //
+
+        // give a random direction
+        // play a Flee animation
+        // after goblin flee
+        // put goblin back to memory pool
+
+        EntityMemoryPool<AGoblinTimid>.Instance().Free(this.gameObject);
+
+        //
+        return;
         isFleeing = true;
         float fleeX = Random.Range(1,10);
         float fleeY = Random.Range(1,10);
