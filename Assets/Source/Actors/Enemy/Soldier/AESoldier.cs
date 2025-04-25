@@ -19,7 +19,9 @@ public class AESoldier : AEnemyActor , ICanMove
 
     }
 
-    public GameObject currentTarget = null;
+
+    //Attack 数据
+    public GameObject attackTarget = null;
 
     public float attackRadius = 2.0f;
 
@@ -30,6 +32,8 @@ public class AESoldier : AEnemyActor , ICanMove
     public float attackTimer = 0.0f;
 
     public float disTarget = 1e9f;
+
+    public float findTimer = 0.0f;
 
     // 检查自身buff
     public override void checkBuff()
@@ -60,18 +64,21 @@ public class AESoldier : AEnemyActor , ICanMove
             float dis  = CompareFunction.EulerDistance(ett.transform.position, transform.position);
             if(dis < minDis)
             {
-                currentTarget = ett;
+                minDis = dis;
+                attackTarget = ett;
             }
         }
         // reutrn fTarget;
     }
 
-    private void AttackTarget()
+    private void Attack()
     {
         // TODO:
             // Animation
 
             //Target decrease health
+        var attackTargetActor = attackTarget.GetComponent<AControlableActor>();
+        attackTargetActor.GetDamage(1.0f); 
 
     }
 
@@ -80,36 +87,51 @@ public class AESoldier : AEnemyActor , ICanMove
         base.OnUpdate();
 
         attackTimer -= Time.deltaTime;
+        findTimer -= Time.deltaTime;
 
-        if (currentTarget == null)
+
+        if (findTimer <=0.0)
         {
             FindTarget();
-            if(currentTarget == null) return;
-            MMoveSystem.MoveTo(this, currentTarget.transform.position);
+            findTimer = 3.0f;
+            if(attackTarget == null) return;
+            MMoveSystem.MoveTo(this, attackTarget.transform.position);
         }
-        disTarget = CompareFunction.EulerDistance(currentTarget.transform.position, transform.position);
-        Debug.Log(disTarget);
+        disTarget = CompareFunction.EulerDistance(attackTarget.transform.position, transform.position);
+        // Debug.Log(disTarget);
         if(disTarget < attackRadius)
         {
             Debug.Log("in soldier radius");
             if(attackTimer < 0.0)
             {
                 attackTimer  = attackCooldown;
-                AttackTarget();
+                Attack();
             }
         }
         else
         {
             
-            MMoveSystem.MoveTo(this, currentTarget.transform.position);
+            MMoveSystem.MoveTo(this, attackTarget.transform.position);
             icm.Move(rb2d);
-            Debug.Log("Move");
+            Debug.Log("Move"+attackTarget);
         }
+
+
     }
 
     protected override void Init()
     {
         base.Init();
 
+    }
+
+
+    public override void OnMouseRightButtonDown()
+    {
+        foreach (var item in MSelectSystem.instance.selectedEntity)
+        {
+            AControlableActor ent = item.GetComponent<AControlableActor>();
+            ent.AttackStart(gameObject);
+        }   
     }
 }
