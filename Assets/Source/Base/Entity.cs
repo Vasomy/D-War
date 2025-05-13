@@ -139,4 +139,13 @@ public class Entity : MonoBehaviour , IColliderable
     {
 
     }
+    /// <summary>
+    /// 物体应该被销毁时调用，
+    /// 该函数用于游戏运行时，该物体被销毁（如被DemonCube吞噬）,死亡时调用。
+    /// 该函数的一般格式为-> free from memorypool -> call Disabled()
+    /// </summary>
+    public virtual void Destroy()
+    {
+
+    }
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 // 每一个不同的游戏关卡应该有一个自己的FWorld用于管理实体
 public class FWorld : MonoBehaviour
 {
+    public FTechTreeNode node;
+
     static public FWorld currentWorld;
     private void Awake()
     {

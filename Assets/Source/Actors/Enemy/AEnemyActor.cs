@@ -84,3 +84,10 @@ public class AEnemyActor : EActor
 
 
 }
+
+public enum EnemyName
+{
+    AFramer,
+    AESoldier,
+    AEBat,
+}

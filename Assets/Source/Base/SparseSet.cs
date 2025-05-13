@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -45,7 +46,7 @@ public class Page
         return Count == x * y;
     }
 }
-public class TSparseSet<T>
+public class TSparseSet<T> : IEnumerable<T>
 {
     public List<T> packed { get; private set; }
     [SerializeField]
@@ -70,5 +71,15 @@ public class TSparseSet<T>
     {
         long index = page.Find(id);
         return packed[(int)index];
+    }
+
+    public IEnumerator<T> GetEnumerator()
+    {
+        return packed.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return packed.GetEnumerator();
     }
 }

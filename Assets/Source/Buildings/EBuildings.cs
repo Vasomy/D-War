@@ -44,8 +44,8 @@ public class FPercent
     {
         return new FPercent(v);
     }
-
-    float percent;
+    [SerializeField]
+    private float percent;
 }
 
 public enum BuildingSpriteUsage

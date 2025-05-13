@@ -63,27 +63,7 @@ public class MMoveSystem : SingletonBase<MMoveSystem>
 
                 }
 
-                //if (ett.ettType == EEntityType.Controlable)
-                //{
-                //    var caEtt = FCast.Cast<AControlableActor>(ett);
-                //    var icm = ett.GetComponent<ICanMove>();
-                //    if(caEtt.curFFPF == ffpfTable[target])
-                //    {
-                //        return;
-                //    }
-
-                //    if (!ffpfTable[target].entities.ContainsKey(ett.uid))
-                //    {
-                //        ffpfTable[target].entities.Add(ett.uid, (AControlableActor)ett);
-                //    }
-                //    if(caEtt.curFFPF != null)
-                //    {
-                //        caEtt.curFFPF.entities.Remove(caEtt.uid);
-                //        caEtt.curFFPF = null;
-                //    }
-                //    ((AControlableActor)ett).curFFPF = ffpfTable[target];
-                //    //icm.ChangeToMoveState();
-                //}
+            
             }
         }
         else
@@ -161,45 +141,18 @@ public class MMoveSystem : SingletonBase<MMoveSystem>
                 {
                     return;
                 }
-                FCommandManager.Instance().SignalCommand(ERightCommandType.eMove);
 
-                return;
-                //Debug.Log("S");
-                Vector2 pos = new Vector2();
-                
-                var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                // {x,y,2} = origin + direction * t;
-                // oZ + dZ*t = 2;
-                // t = (2-oZ)/dZ;
-                float plane_pos_z = 0f;
-                var t = (plane_pos_z - ray.origin.z) / ray.direction.z;
-                pos.x = ray.origin.x + ray.direction.x * t;
-                pos.y = ray.origin.y + ray.direction.y * t;
-
-                //CameraController.instance.text.text = pos.ToString();
-
-                var indexedPos = GridManager.GetIndexedPos(pos);
-                if(indexedPos.x < 0||indexedPos.y<0)
+                var mousePos = CameraController.instance.GetMousePos();
+                var indexed = GridManager.GetIndexedPos(mousePos);
+                if(indexed.x<0||indexed.y<0||indexed.x>=GridManager.instance.width||indexed.y>=GridManager.instance.height)
                 {
                     return;
                 }
 
-                /// signal a move command
+                FCommandManager.Instance().SignalCommand(ERightCommandType.eMove);
 
-
-                AddFlowFieldPathFinding(GridManager.GetIndexedPos(pos),
-                    MSelectSystem.instance.selectedEntity)
-                    ;
-                foreach (var ett in MSelectSystem.instance.selectedEntity)
-                {
-                    if (ett.TryGetComponent<ICanMove>(out var icm))
-                    {
-                        icm.ChangeToMoveState();
-                    }
-                }
-                //ffpf.Add(new FlowFieldPathFinding(MSelectSystem.instance.selectedEntity,
-                //    GridManager.GetIndexedPos(CameraController.instance.GetMousePos())
-                //    ));
+                return;
+                
             }
         }
 

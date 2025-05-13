@@ -9,7 +9,7 @@ public class ETree : ECollectableEntity
     {
         base.Init();
         //Debug.Log(nam);
-        EntityMemoryPool<ETree>.Instance().RegisterObject(gameObject);
+        EntityMemoryPoolProxy<ETree>.Register(this);
     }
     public override void GetResource()
     {
@@ -24,7 +24,7 @@ public class ETree : ECollectableEntity
 
     public override void Destory()
     {
-        EntityMemoryPool<ETree>.Instance().Free(gameObject);
+        EntityMemoryPoolProxy<ETree>.Free(this);
         GridManager.CalculateOccupiedArea(uid, transform.position, lw, rw, th, dh, false, true);
     }
 }

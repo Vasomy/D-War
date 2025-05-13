@@ -188,11 +188,6 @@ public class FlowField
                     }
                 }
             }
-            //Debug.Log("BFS 2");
-
-
-
-            //Debug.Log("FFPF Count : "+cCount);
         }
     }
 }
@@ -226,19 +221,6 @@ public class FlowFieldPathFinding
             
             if(ett.TryGetComponent<ICanMove>(out var icm))
             {
-                //Debug.Log(ett.GetType());
-                //Debug.Log("To ett a ffpf");
-                //var caEtt = FCast.Cast<AControlableActor>(ett);
-                //if (caEtt.curFFPF != null)
-                //{ 
-                //    Debug.Log("Has curFFPF");
-                //    caEtt.curFFPF.entities.Remove(caEtt.uid);
-                //    caEtt.curFFPF = null;
-                //}
-                //((AControlableActor)ett).curFFPF = this;
-                //entities.Add(ett.uid,(AControlableActor)ett);
-                //icm.ChangeToMoveState();
-
                 if(icm.iPathFinding !=null)
                 {
                     icm.iPathFinding.entities.Remove(ett.uid);

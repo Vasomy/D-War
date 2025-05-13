@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4261326482546821590}
   - component: {fileID: 8783373675130871602}
   - component: {fileID: 1917908929432524606}
+  - component: {fileID: -92532049354146264}
   m_Layer: 0
   m_Name: BFarm
   m_TagString: Entity
@@ -50,6 +51,7 @@ MonoBehaviour:
   rb2d: {fileID: 0}
   buildingName: Farm
   spriteRenderer: {fileID: 0}
+  buildingData: {fileID: 0}
   maxProduceNums: 3
   curProduceNums: 0
   target: {fileID: 7845130188418800491, guid: 87373630de5fefa4c8208e2335e6ea13, type: 3}
@@ -106,3 +108,38 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &-92532049354146264
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 213745237796927684}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.4

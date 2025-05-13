@@ -46,6 +46,10 @@ public class BProducer : EBuildings
                 {
                     continue;
                 }
+                if(i<0||j<0||i>=GridManager.instance.width || j>=GridManager.instance.height)
+                {
+                    continue;
+                }
                 Vector2Int cPos = new Vector2Int(i+gridPos.x,j+gridPos.y);
                 var id = GridManager.GetPosID(cPos);
                 if(id == 0)

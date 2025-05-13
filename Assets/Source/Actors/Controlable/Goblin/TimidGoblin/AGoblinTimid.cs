@@ -46,7 +46,7 @@ public class AGoblinTimid : AControlableActor, ICanMove
         // after goblin flee
         // put goblin back to memory pool
 
-        EntityMemoryPool<AGoblinTimid>.Instance().Free(this.gameObject);
+        EntityMemoryPoolProxy<AGoblinTimid>.Free(this);
 
         //
         return;

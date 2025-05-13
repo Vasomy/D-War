@@ -21,7 +21,7 @@ public class BFarm : BProducer
 
     public override void Generate()
     {
-        EntityMemoryPool<AFarmer>.Instance().Get();
+
     }
 
 
@@ -32,4 +32,9 @@ public class BFarm : BProducer
             isPreview, isDelete);
     }
 
+    public override void Destroy()
+    {
+        EntityMemoryPoolProxy<BFarm>.GetPool().Free(gameObject);
+        Disabled();
+    }
 }

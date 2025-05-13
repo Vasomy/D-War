@@ -24,7 +24,11 @@ public class TechTreeModifier
     [Header("Friendly Controlable Actor")] // 友方单位的 属性，！ 不包括建筑
     public FPercent attackForce_Extra_Percent = 0;// 友方单位（非建筑）的攻击力百分比提升
     public float attackForce_Extra = 0;// 具体提升数值
-    //[Space]
+    [Space]
+    [Header("Buidlings Stats")]
+    public FPercent building_attackForce_Extra_Percent = 0;
+    public float building_attackForce_Extra = 0;
+
 }
 
 

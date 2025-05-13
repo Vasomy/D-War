@@ -8,6 +8,10 @@ using UnityEngine;
 
 public class FGameStats : SingletonBase<FGameStats>
 {
+    [Header("Modifier")]
+    public TechTreeModifier techTreeModifier;
+
+
     [Header("Resource")]
     public PResourceStats resoureStats;
     [Space]

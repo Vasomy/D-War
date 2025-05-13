@@ -90,8 +90,8 @@ public class GridManager : SingletonBase<GridManager>
 
     // GridManager 所管理的grid的数量 width*height = girdsNum
     // 其数据来源于FMap类
-    public int width=>currentMap.width;
-    public int height=>currentMap.height;
+    public int width = 50;
+    public int height = 50;
     [SerializeField]
     private int cursorOnGirdX;
     [SerializeField]

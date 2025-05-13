@@ -15,6 +15,10 @@ public class CameraController : SingletonBase<CameraController>
     public TextMeshProUGUI text;
     public TextMeshProUGUI text4select;
     public Vector2 mousePositionOnScreen;
+    /// <summary>
+    /// 获取鼠标位置在游戏内的坐标
+    /// </summary>
+    /// <returns></returns>
     public Vector2 GetMousePos() 
     {
         Vector3 MousePos = Input.mousePosition;

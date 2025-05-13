@@ -37,6 +37,11 @@ public class AFarmer : AControlableActor, ICanCollect, ICanMove
     protected override void Init()
     {
         base.Init();
+
+        // add 'this' into specify pool
+        if (!EntityMemoryPoolManager.IsInPool(this))
+            EntityMemoryPoolManager.Register(this);
+
         stateMachine = new FControlableActorStateMachine(this);
 
         moveState = new FCAMoveState(stateMachine, GetComponent<ICanMove>());
@@ -55,5 +60,10 @@ public class AFarmer : AControlableActor, ICanCollect, ICanMove
         {
             Gizmos.DrawWireSphere(transform.position, icc.iCollectDistance);
         }
+    }
+
+    public override void Destroy()
+    {
+        EntityMemoryPoolProxy<AFarmer>.Free(this);
     }
 }

@@ -1,9 +1,120 @@
 using System;
+using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
+
+public class EntityMemoryPoolManager
+{
+    /// <summary>
+    /// 字符串对应一个内存池
+    /// 字符串的值来自于T.GetType().Name;
+    /// </summary>
+    static public Dictionary<string, EntityMemoryPool> pools = new Dictionary<string, EntityMemoryPool>();
+
+    static public void Check<T>()where T:MonoBehaviour
+    {
+        EntityMemoryPoolProxy<T>.Check();
+    }
+    static public void Check(string tName)
+    {
+        if(pools.TryGetValue(tName, out EntityMemoryPool pool))
+        {
+
+        }
+        else
+        {
+            pools.Add(tName,new EntityMemoryPool(tName));
+        }
+    }
+
+    static public EntityMemoryPool GetPool<T>()where T : MonoBehaviour
+    {
+        Check<T>();
+        if (pools.TryGetValue(typeof(T).Name, out var pool))
+        {
+            return pool;
+        }
+        Debug.LogError("Cant find pool that specify Type named " + typeof(T).Name + " !");
+        return null;
+    }
+    static public EntityMemoryPool GetPool(string tName)
+    {
+        Check(tName);
+        if(pools.TryGetValue(tName,out var pool))
+        {
+            return pool;
+        }
+        Debug.LogError("Cant find pool that specify Type named " + tName + " !");
+        return null;
+    }
+
+    static public void Register<T>(T instance)where T:MonoBehaviour
+    {
+        EntityMemoryPoolProxy<T>.GetPool().RegisterObject(instance.gameObject);
+    }
+    static public void Register<T>(GameObject instance)where T:MonoBehaviour
+    {
+        EntityMemoryPoolProxy<T>.GetPool().RegisterObject(instance);
+    }
+
+    static public bool IsInPool<T>(T instance)where T :MonoBehaviour
+    {
+        return EntityMemoryPoolProxy<T>.GetPool().IsInPool(instance.gameObject);
+    }
+    static public bool IsInPool<T>(GameObject instance) where T : MonoBehaviour
+    {
+        return EntityMemoryPoolProxy<T>.GetPool().IsInPool(instance);
+    }
+
+}
+
+/// <summary>
+/// 某个类型T对应的类型池的代理类
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public class EntityMemoryPoolProxy<T>where T :MonoBehaviour
+{
+    public EntityMemoryPoolProxy()
+    {
+        pool = new EntityMemoryPool(typeof(T));
+    }
+
+    private EntityMemoryPool pool;
+
+    static public EntityMemoryPool GetPool()
+    {
+        Check();
+        return instance.pool;
+    }
+
+    static public EntityMemoryPoolProxy<T> instance = null;
+    static public void Free(T target)
+    {
+        Check();
+        instance.pool.Free(target.gameObject);
+    }
+    static public GameObject Get()
+    {
+        Check();
+        return instance.pool.Get();
+    }
+    static public void Register(T target)
+    {
+        Check();
+        instance.pool.RegisterObject(target.gameObject);
+    }
+    static public void Check()
+    {
+        if (instance == null)
+            instance = new EntityMemoryPoolProxy<T>();
+    }
+}
+
+
 
 // 内存池，每次Instantiate Entity
 // 应该从该对象的池子里获取
@@ -17,19 +128,19 @@ using UnityEngine;
 // 所有的prefab名字应该与类名一致（非常重要！！！！！！！！！！！！！！！！！！！！）
 // 
 // 生成object，必须挂载了Entity脚本
-public class EntityMemoryPool<T> where T : MonoBehaviour
+public class EntityMemoryPool //<T> where T : MonoBehaviour
 {
-    static private EntityMemoryPool<T> instance;
-    static public EntityMemoryPool<T> Instance()
-    {
-        if(instance == null)
-        {
-            instance = new EntityMemoryPool<T>();
-        }
-        if (instance == null)
-            Debug.Log("NULL MEMORY POOL!");
-        return instance;
-    }
+    //static private EntityMemoryPool<T> instance;
+    //static public EntityMemoryPool<T> Instance()
+    //{
+    //    if(instance == null)
+    //    {
+    //        instance = new EntityMemoryPool<T>();
+    //    }
+    //    if (instance == null)
+    //        Debug.Log("NULL MEMORY POOL!");
+    //    return instance;
+    //}
 
     static public GameObject freeObjectStorge =>GameObject.Find("FreeObjectStorge");
     static public GameObject unitStorge => GameObject.Find("UnitStorge");
@@ -43,10 +154,12 @@ public class EntityMemoryPool<T> where T : MonoBehaviour
     public Queue<GameObject> freeQueue = new Queue<GameObject>();
     // 已经被Get的对象,k
     public HashSet<GameObject> busySet = new HashSet<GameObject>();
-    public EntityMemoryPool(int size = DefaultSize)
+
+    private void FindAndSetPrefab(string pName)
     {
-        string prefabName = typeof(T).Name;
-        //Debug.Log(paths.Count());
+
+        string prefabName = pName;
+        Debug.Log("Try to find prefab named : " + pName);
         if (GameContext.instance.allEntityPrefabsDict.ContainsKey(prefabName)) 
         {
             Target = GameContext.instance.allEntityPrefabsDict[prefabName];
@@ -55,16 +168,27 @@ public class EntityMemoryPool<T> where T : MonoBehaviour
         {
             Debug.LogError("Cant find prefab named : " + prefabName+" , please check your prefab is exist or named wrong!");
         }
+    }
+    
+    public EntityMemoryPool(string typeName,int size = DefaultSize)
+    {
+        FindAndSetPrefab(typeName);
 
-        if(Target == null)
+        for (int i = 0; i < size; i++)
         {
-            Debug.Log("Target is null? WTF!");
+            NewOne();
         }
+    }
+
+    public EntityMemoryPool(Type type,int size = DefaultSize)
+    {
+        FindAndSetPrefab(type.Name);
         
         for(int i = 0;i< size; i++)
         {
             NewOne();
         }
+
     }
     /// <summary>
     /// 在testing时，如果想要把场景中的实体加入到内存池中管理，在Awake（或者重写Init方法）中
@@ -86,7 +210,18 @@ public class EntityMemoryPool<T> where T : MonoBehaviour
             busySet.Add(obj);
         }
     }
-
+    /// <summary>
+    /// 判断一个obj是否在内存池中管理
+    /// </summary>
+    /// <param name="obj"></param>
+    public bool IsInPool(GameObject obj)
+    {
+        if(busySet.Contains(obj) || freeQueue.Contains(obj) )
+        {
+            return true;
+        }
+        return false;
+    }
     public GameObject Get(Transform parent = null)
     {
         //Debug.Log("current fq size : "+freeCount);

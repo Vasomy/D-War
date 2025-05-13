@@ -9,8 +9,11 @@ public class FTimer
     {
         gap = inGap;
     }
+    /// <summary>
+    /// 如果已经到达时间间隔，返回true并把累计时间置0
+    /// </summary>
+    /// <returns></returns>
     public bool Timer()
-
     {
         sumTime += Time.deltaTime;
         if(sumTime >= gap)

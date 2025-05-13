@@ -59,6 +59,9 @@ public class AControlableActor : EActor
     {
         base.Init();
         rb2d.freezeRotation = true;
+
+        var world = FWorld.currentWorld;
+        world.RegisterFriendlyEntity(this);
     }
     public override void SetType()
     {

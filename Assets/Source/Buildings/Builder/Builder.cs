@@ -17,7 +17,7 @@ public class Builder : SingletonBase<Builder>
     protected override void ConstructFunction()
     {
         base.ConstructFunction();
-        
+        builds = GameObject.Find("Builds");
     }
 
     bool dirty = false;

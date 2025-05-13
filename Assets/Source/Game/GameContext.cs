@@ -32,13 +32,13 @@ public class GameContext : SingletonBase<GameContext>
         allEntityPrefabsDict = new Dictionary<string, GameObject>();
         foreach(var prefab in  allEntityPrefabs)
         {
+            Debug.Log(prefab.name + " get in dict for find!");
             allEntityPrefabsDict.Add(prefab.name, prefab);
         }
-        
     }
     // player stats info
 
-    // player unlocked buildings 
+    // all buildings 
     public List<GameObject> buildingsPrefab;
     public Dictionary<string , GameObject> DictBuildingsPrefab;
 
