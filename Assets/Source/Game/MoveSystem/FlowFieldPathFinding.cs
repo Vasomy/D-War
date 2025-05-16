@@ -68,8 +68,10 @@ public class FlowField
 
     public void GizmosDrawFlowFieldDirection()
     {
-        int widthNums = 20;// 左右两边各渲染 widthNums个网格
-        int heightNums = 10;// 同上（上下两边）
+        float xS = GridManager.instance.XStep;
+        float yS = GridManager.instance.YStep;
+        int widthNums = (int)(40.0f/xS);// 左右两边各渲染 widthNums个网格
+        int heightNums = (int)(20.0f/yS);// 同上（上下两边）
 
         var cameraPoint = Camera.main.transform.position;
         var gm = GridManager.instance;
@@ -228,10 +230,10 @@ public class FlowFieldPathFinding
                 }
                 icm.iPathFinding = this;
                 entities.Add(ett.uid, ett);
-
+                MoveEffectHandle.instance.ProccessEntity(ett, icm);
             }
         }
-        //Debug.Log("Nums of ett is " + entities.Count);
+        //Debug.Log("Nums of actor is " + entities.Count);
         timer = new FTimer();
         UpdateFlowField();
     }
@@ -244,9 +246,9 @@ public class FlowFieldPathFinding
             if (ett.Value.TryGetComponent<ICanMove>(out var icm))
             {
                 icm.iPathFinding = null;
-                //if (ett.Value.Tr != null)
+                //if (actor.Value.Tr != null)
                 //{
-                //    ett.Value.iDirection = Vector2.zero;
+                //    actor.Value.iDirection = Vector2.zero;
                 //}
                 icm.iDirection = Vector2.zero;
             }
@@ -291,7 +293,7 @@ public class FlowFieldPathFinding
             }
         }
         timer.SetGap(expectMaxTime);
-        Debug.Log("Expect Time : " + expectMaxTime);
+        // Debug.Log("Expect Time : " + expectMaxTime);
     }
 
     public bool Update()

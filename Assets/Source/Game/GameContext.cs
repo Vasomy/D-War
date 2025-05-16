@@ -16,6 +16,8 @@ public class GameContext : SingletonBase<GameContext>
     public Hashtable allFriendlyUnits = new Hashtable();
 
     public FMap gameMap;
+
+    
     protected override void ConstructFunction()
     {
         base.ConstructFunction();
@@ -35,6 +37,7 @@ public class GameContext : SingletonBase<GameContext>
             Debug.Log(prefab.name + " get in dict for find!");
             allEntityPrefabsDict.Add(prefab.name, prefab);
         }
+        Debug.Log("Enum name : " + EnemyName.AFarmer);
     }
     // player stats info
 

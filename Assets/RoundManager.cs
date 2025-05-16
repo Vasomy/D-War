@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,7 @@ public class RoundManager : MonoBehaviour
 
     // ui
     public Image coldDownBar;
+    public TextMeshProUGUI coldDownTime;
     private void LateUpdate()
     {
         if(time >=0.0f)
@@ -30,6 +32,9 @@ public class RoundManager : MonoBehaviour
                 var bound = SpawnInfo.instance.spawnBounds[curRound];
                 _1stSp.MakeSpawnPlan(bound.spawnBatches);
             }
+
+            time = baseRoundGap;
+            curRound++;
         }
 
         //coldDownBar.fillAmount = time/baseRoundGap;

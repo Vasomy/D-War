@@ -87,7 +87,7 @@ public class AEnemyActor : EActor
 
 public enum EnemyName
 {
-    AFramer,
+    AFarmer,
     AESoldier,
     AEBat,
 }

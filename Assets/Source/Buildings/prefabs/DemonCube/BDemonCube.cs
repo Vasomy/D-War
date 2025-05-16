@@ -20,14 +20,13 @@ public class BDemonCube : EBuildings
         var world = FWorld.currentWorld;
         if (timer.Timer())
         {
-            Debug.Log("Begin Eat!");
+            //Debug.Log("Begin Eat!");
             foreach (var ett in world.friendlyEntity)
             {
-                Debug.Log("Total nums");
                 if (CompareFunction.EulerDistance(ett.transform.position,transform.position)<=radiuse) 
                 {
                     var v2i = GridManager.GetIndexedPos(ett.transform.position);
-                    Debug.Log("Get One");
+                    //Debug.Log("Get One");
                     ///
                     /// 如果有可能这里应该播放特殊的吞噬动画区别与一般的死亡动画
                     ///
@@ -35,7 +34,7 @@ public class BDemonCube : EBuildings
                     ett.Destroy();
                 }
             }
-            Debug.Log("End Eat!");
+            //Debug.Log("End Eat!");
 
         }
     }

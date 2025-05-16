@@ -25,6 +25,16 @@ public class ETree : ECollectableEntity
     public override void Destory()
     {
         EntityMemoryPoolProxy<ETree>.Free(this);
+    }
+
+    public override void Disabled()
+    {
         GridManager.CalculateOccupiedArea(uid, transform.position, lw, rw, th, dh, false, true);
+        
+    }
+
+    public override void Enabled()
+    {
+        GridManager.CalculateOccupiedArea(uid, transform.position, lw, rw, th, dh, true, false);
     }
 }

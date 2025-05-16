@@ -235,11 +235,11 @@ public class EntityMemoryPool //<T> where T : MonoBehaviour
             LargeStorge();
         }
         var peek = freeQueue.Peek();
+        peek.GetComponent<Entity>().Enabled();
         peek.transform.parent = parent;
         busySet.Add(peek);
         freeQueue.Dequeue();
         peek.SetActive(true);
-        peek.GetComponent<Entity>().Enabled();
         return peek;
     }
     // 当一个实体结束时

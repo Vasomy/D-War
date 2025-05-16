@@ -12,9 +12,6 @@ public class FTechTreeNode : MonoBehaviour
     public string description;
     public string techName;
 
-    public int level = 0;
-    public int maxLevel = 1;
-
     public TechTreeContent content;
     public List<TechTreeContent> parent;
 
@@ -32,6 +29,8 @@ public class FTechTreeNode : MonoBehaviour
 
     public void OnClick()
     {
+        
+
         TechTree.Instance().previewImage.sprite = techSprite;
         TechTree.Instance().activeNode = this;
         

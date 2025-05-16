@@ -6,6 +6,10 @@ using UnityEngine;
 public class EActor : Entity
 {
     public SpriteRenderer spriteRenderer;
+    //
+    // path finding properites
+    // packed in ICanMoveInterface
+    //public FlowFieldPathFinding curFFPF = null;
     private void Start()
     {
         Init();

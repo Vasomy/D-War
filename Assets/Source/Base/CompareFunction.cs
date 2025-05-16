@@ -5,7 +5,13 @@ using UnityEngine;
 
 public class CompareFunction
 {
-    const float m_eps = (float)1e-2;
+    const float m_eps = (float)1e-3;
+
+    static public bool is_same_float(float v1,float v2,float eps = m_eps)
+    {
+        return (Mathf.Abs(v1 - v2) <= eps);
+    }
+
     static public bool is_same_vec2f(Vector2 v1, Vector2 v2, float eps = m_eps)
     {
         return (Mathf.Abs(v1.x - v2.x) <= eps) && (Mathf.Abs(v1.y - v2.y) <= eps);

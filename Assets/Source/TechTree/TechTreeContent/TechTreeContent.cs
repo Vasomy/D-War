@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
+[Serializable]
 public class TechTreeContentTrigger
 {
     public int level = 0;
@@ -28,29 +28,27 @@ public class TechTreeContentTrigger
     }
 
 }
+[Serializable]
 
 public class TechTreeAttackUp : TechTreeContentTrigger
 {
     /// <summary>
     /// 具体数据数组的长度严格等于最大等级maxLevel+1
     /// </summary>
-    public FPercent[] data = { 0,0.1f,0.2f,0.3f};
+    public FPercent[] percentAttackUp;
 
-
-    public TechTreeAttackUp(TechTreeContent enumContent, int level, int maxLevel)
-        :base(enumContent,level,maxLevel)
+    public TechTreeAttackUp()
+        : base(TechTreeContent.eAttackUp_3, 0, 3)
     {
 
     }
-
-
     public override void LevelUp() 
     { 
         if(level<maxLevel)
         {
             int lastLevel = level;
             level++;
-            FPercent diff = data[level] -data[lastLevel];
+            FPercent diff = percentAttackUp[level] - percentAttackUp[lastLevel];
             FGameStats.instance.techTreeModifier.building_attackForce_Extra_Percent += diff;
             FGameStats.instance.techTreeModifier.attackForce_Extra_Percent += diff;
             Debug.Log("Attack up Level Up!");
@@ -61,7 +59,7 @@ public class TechTreeAttackUp : TechTreeContentTrigger
     {
         int lastLevel = level;
         level = 0;
-        FPercent diff = data[level];
+        FPercent diff = percentAttackUp[level];
         FGameStats.instance.techTreeModifier.building_attackForce_Extra_Percent -= diff;
         FGameStats.instance.techTreeModifier.attackForce_Extra_Percent -= diff;
     }

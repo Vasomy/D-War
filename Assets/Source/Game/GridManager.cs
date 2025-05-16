@@ -22,6 +22,23 @@ public class GridManager : SingletonBase<GridManager>
         cursorOnGirdX = GetPos(CameraController.instance.GetMousePosByRay(0)).x;
         cursorOnGirdY = GetPos(CameraController.instance.GetMousePosByRay(0)).y;
         //CameraController.instance.text.text = cursorOnGirdX.ToString() +" , "+ cursorOnGirdY.ToString();
+
+        Vector2 pos = new Vector2();
+
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        // {x,y,2} = origin + direction * t;
+        // oZ + dZ*t = 2;
+        // t = (2-oZ)/dZ;
+        float plane_pos_z = 0f;
+        var t = (plane_pos_z - ray.origin.z) / ray.direction.z;
+        pos.x = ray.origin.x + ray.direction.x * t;
+        pos.y = ray.origin.y + ray.direction.y * t;
+
+
+        var indexedPos = GridManager.GetIndexedPos(pos);
+        var posId = GridManager.GetPosID(indexedPos);
+
+        CameraController.instance.text.text = posId.ToString();
     }
 
     // static function
@@ -206,8 +223,8 @@ public class GridManager : SingletonBase<GridManager>
         var cameraPoint = Camera.main.transform.position;
         var cameraCenterPos = GetPos(cameraPoint);
 
-        int widthNums = 20;// 左右两边各渲染 widthNums个网格
-        int heightNums = 10;// 同上（上下两边）
+        int widthNums = (int)(40.0f / XStep);// 左右两边各渲染 widthNums个网格
+        int heightNums = (int)(20.0f/YStep);// 同上（上下两边）
 
         Color color = Color.white;
         color.a = 0.5f;

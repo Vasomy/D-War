@@ -11,8 +11,15 @@ public class SpawnPlan
     public int curNums = 0;
     public EntityMemoryPool genTargetPool;
 }
-public class EnemySpawnPoint : MonoBehaviour
+public class EnemySpawnPoint : EStaticAlignedEntity
 {
+    protected override void Init()
+    {
+        base.Init();
+        
+        GridManager.CalculateOccupiedArea(uid,transform.position,2,2,2,2,false,false);
+    }
+
     public void MakeSpawnPlan(List<SpawnBatch> batch)
     {
         plans.Enqueue(new List<SpawnPlan>());
@@ -26,6 +33,7 @@ public class EnemySpawnPoint : MonoBehaviour
             plan.curNums = 0;
             plan.genTargetPool = EntityMemoryPoolManager.GetPool(sb.enemyName.ToString());
             front.Add(plan);
+            //Debug.Log("Prepare to gen : " + sb.enemyName.ToString());
         }
     }
 

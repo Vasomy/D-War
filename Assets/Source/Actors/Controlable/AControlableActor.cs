@@ -19,9 +19,7 @@ public enum EControlableProperties : int
 //  可以被框选的实体，其他实体最多被点选
 public class AControlableActor : EActor 
 {
-    //
-    // path finding properites
-    public FlowFieldPathFinding curFFPF = null;
+    
     //
     public FControlableActorStateMachine stateMachine;
     // stop actor move & reset\clear other state's data

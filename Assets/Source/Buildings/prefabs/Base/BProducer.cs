@@ -78,7 +78,7 @@ public class BProducer : EBuildings
     //
     // {
     //      MemoryPool<what you want>.Instance().Get(/* Args */);
-    //      ....you can gen some else ett if you want
+    //      ....you can gen some else actor if you want
     //      MemoryPool<what you want 2>.Instance().Get(/* Args */);
     //      ....
     // }

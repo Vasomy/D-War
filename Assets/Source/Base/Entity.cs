@@ -15,11 +15,15 @@ public enum EEntityType
 
 public class Entity : MonoBehaviour , IColliderable
 {
+    
     public long uid;
     private bool isSelected = false;
     public EEntityType ettType = EEntityType.Entity;
     public Rigidbody2D rb2d;
     public Vector2Int indexedPos => GridManager.GetIndexedPos(transform.position);
+
+    public SpriteRenderer sr;
+    public GameObject srObject;
     // 通知实体被选中
     public void InfoSelect()
     {
@@ -71,6 +75,12 @@ public class Entity : MonoBehaviour , IColliderable
         uid = GameContext.instance.GetId();
         rb2d = GetComponent<Rigidbody2D>();
         SetType();
+
+        if(! TryGetComponent<SpriteRenderer>(out sr))
+        {
+            sr = GetComponentInChildren<SpriteRenderer>();
+            srObject = sr.gameObject;
+        }
 
         ///
         ///

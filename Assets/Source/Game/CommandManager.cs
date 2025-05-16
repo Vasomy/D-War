@@ -18,6 +18,12 @@ public class FCommandManager : MonoBehaviour
 { 
     private static FCommandManager instance;
 
+    /// <summary>
+    /// 游戏ui有关的代码在激活ui场景时，应该将该值设为true，
+    /// 在关闭ui场景时，应该将值设为false
+    /// </summary>
+    public bool isOnUI = false;
+
     private void Awake()
     {
         instance = this;
@@ -97,16 +103,23 @@ public class FCommandManager : MonoBehaviour
             pos.x = ray.origin.x + ray.direction.x * t;
             pos.y = ray.origin.y + ray.direction.y * t;
 
-            CameraController.instance.text.text = pos.ToString();
 
             var indexedPos = GridManager.GetIndexedPos(pos);
+            var posId = GridManager.GetPosID(indexedPos);
             if (indexedPos.x < 0 || indexedPos.y < 0)
             {
                 return;
             }
 
+
+            if (posId != 0)
+            {
+                return;
+            }
+
             MMoveSystem.instance.AddFlowFieldPathFinding(
-                GridManager.GetIndexedPos( CameraController.instance.GetMousePosByRay(0) ),
+                //GridManager.GetIndexedPos( CameraController.instance.GetMousePosByRay(0) ),
+                indexedPos,
                 MSelectSystem.instance.selectedEntity
                 );
 

@@ -61,6 +61,7 @@ public class MMoveSystem : SingletonBase<MMoveSystem>
                     }
                     icm.iPathFinding = ffpfTable[target];
 
+
                 }
 
             
@@ -87,7 +88,7 @@ public class MMoveSystem : SingletonBase<MMoveSystem>
         {
             if(!FFPF.entities.ContainsKey(ett.uid))
                 FFPF.entities.Add(ett.uid,ett);
-            //ett.GetComponent<ICanMove>().ChangeToMoveState();
+            //actor.GetComponent<ICanMove>().ChangeToMoveState();
         }
         else
         {

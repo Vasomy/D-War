@@ -15,6 +15,10 @@ public class CameraController : SingletonBase<CameraController>
     public TextMeshProUGUI text;
     public TextMeshProUGUI text4select;
     public Vector2 mousePositionOnScreen;
+    public float moveSpeed;
+    [SerializeField]
+    private float edgeLengthScale = 0.05f;
+
     /// <summary>
     /// 获取鼠标位置在游戏内的坐标
     /// </summary>
@@ -32,6 +36,32 @@ public class CameraController : SingletonBase<CameraController>
     {
         base.OnUpdate();
         text4select.text = MSelectSystem.instance.selectedEntity.Count.ToString();
+
+        if(!FCommandManager.Instance().isOnUI)
+        {
+            var mousePos = Input.mousePosition;
+            var screenW = mousePos.x/Camera.main.pixelWidth;
+            var screenH = mousePos.y/Camera.main.pixelHeight;
+            if (screenW < 0 || screenW > 1.0f || screenH < 0 || screenH > 1.0f) return;
+
+            if(screenW<=edgeLengthScale || screenW>=1.0f-edgeLengthScale) 
+            {
+                // move horizontally
+                float dir = screenW<=edgeLengthScale ? -1.0f : 1.0f;
+                Vector3 position = Camera.main.gameObject.transform.position;
+                position.x += dir * moveSpeed * Time.deltaTime;
+                Camera.main.gameObject.transform.position = position;
+            }
+            if(screenH<=edgeLengthScale || screenH>=1.0f-edgeLengthScale)
+            {
+                float dir = screenH <= edgeLengthScale ? -1.0f : 1.0f;
+                Vector3 position = Camera.main.gameObject.transform.position;
+                position.y += dir * moveSpeed * Time.deltaTime;
+                Camera.main.gameObject.transform.position = position;
+            }
+
+        }
+
     }
     public Vector2 GetMousePosByRay(float target_plane_z)
     {

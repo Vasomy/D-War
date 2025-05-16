@@ -37,7 +37,17 @@ public class TechTree : MonoBehaviour
     /// </summary>
     public void OpenTechTree()
     {
-        uiTechTree.SetActive(true);
+        if (!FCommandManager.Instance().isOnUI)
+        {
+            FCommandManager.Instance().isOnUI = true;
+            uiTechTree.SetActive(true);
+        }
+    }
+
+    public void CloseTechTree()
+    {
+        FCommandManager.Instance().isOnUI = false;
+        uiTechTree.SetActive(false);
     }
 
     public void Awake()
@@ -50,12 +60,21 @@ public class TechTree : MonoBehaviour
         InitAllTech();
     }
 
-    TechTreeAttackUp attackUp;
     private Dictionary<TechTreeContent, TechTreeContentTrigger> dictContents;
+    public TechTreeContentTrigger GetContentTrigger(TechTreeContent content)
+    {
+        return dictContents[content];
+    }
+    /// <summary>
+    /// all  tech contents
+    /// </summary>
+    [Header("All tech contents")]
+    public TechTreeAttackUp attackUp;
+
+
     void InitAllTech()
     {
         dictContents = new Dictionary<TechTreeContent, TechTreeContentTrigger> ();
-        attackUp = new TechTreeAttackUp(TechTreeContent.eAttackUp_3, 0, 3);
         RegisterContent(attackUp);
     }
 
@@ -77,8 +96,17 @@ public class TechTree : MonoBehaviour
     public void UpgradeTechTree()
     {
         if(activeNode != null) 
-        { 
-            if(dictContents.TryGetValue(activeNode.content,out var val))
+        {
+            foreach (TechTreeContent content in activeNode.parent)
+            {
+                var ct = TechTree.Instance().GetContentTrigger(content);
+                if(ct.level == 0)
+                {
+                    Debug.Log("The parent tech node hasnt unlocked!");
+                    return;
+                }
+            }
+            if (dictContents.TryGetValue(activeNode.content,out var val))
             {
                 val.LevelUp();
             }
