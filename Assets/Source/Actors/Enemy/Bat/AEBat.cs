@@ -1,80 +1,70 @@
 using UnityEngine;
 
-using UnityEngine;
-
 
 public class AEBat : AEnemyActor , ICanMove
 {
     ICanMove icm => GetComponent<ICanMove>();
     Vector2 ICanMove.iDirection { get; set; } = Vector2.zero;
-    float ICanMove.iSpeed { get; set; } = 1.0f;
-    FlowFieldPathFinding ICanMove.iPathFinding { get; set; } = null;
+    float ICanMove.iSpeed { get; set; } = 10.0f;
+    FlowFieldPathFinding ICanMove.iPathFinding { get; set;} = null;
 
     public void ChangeToMoveState()
     {
-
     }
 
-    public GameObject currentTarget = null;
 
-    public float attackRadius = 1.0f;
-
-    public float attackForce = 1.0f;
-
-    public float attackCooldown = 1.0f;
-
-    public float attackTimer = 0.0f;
-
-    public float disTarget = 1e9f;
-        
-    private GameObject FindTarget()
+    protected override void FindTarget()
     {
-        var allFriendEtt = GameObject.FindGameObjectsWithTag("friendly");
-        float minDis = 1e9f;
-        GameObject _target = null;
-        foreach(var ett in allFriendEtt)
+        base.FindTarget();
+    }
+
+    protected override void Attack()
+    {
+        base.Attack();
+    }
+
+    protected override void AttackProject()
+    {
+        float disTarget = CompareFunction.EulerDistance(EAttack.attackTarget.transform.position, transform.position);
+        if (disTarget < EAttack.attackRadius)
         {
-            float dis  = CompareFunction.EulerDistance(ett.transform.position, transform.position);
-            if(dis < minDis)
+            Debug.Log("long" + disTarget);
+            if (EAttack.attackTimer < 0.0)
             {
-                _target = ett;
-            }
-        }
-        return _target;
-    }
-
-    private void AttackTarget()
-    {
-        // TODO:
-            // Animation
-
-            //Target decrease health
-    }
-
-    protected override void OnUpdate()
-    {
-        base.OnUpdate();
-
-        attackTimer -= Time.deltaTime;
-
-        if (currentTarget == null)
-        {
-            currentTarget = FindTarget();
-        }
-        disTarget = CompareFunction.EulerDistance(currentTarget.transform.position, transform.position);
-        if(disTarget < attackRadius)
-        {
-            if(attackTimer < 0.0)
-            {
-                attackTimer  = attackCooldown;
-                AttackTarget();
+                EAttack.attackTimer = EAttack.attackCooldown;
+                Attack();
             }
         }
         else
         {
-            MMoveSystem.MoveTo(this, currentTarget.transform.position);
+            MMoveSystem.MoveTo(this, EAttack.attackTarget.transform.position);
             icm.Move(rb2d);
+            Debug.Log("Move" + EAttack.attackTarget);
         }
+    }
+
+    protected override void FindProject()
+    {
+        FindTarget();
+        EFind.findTimer = 3.0f;
+    }
+    protected override void OnUpdate()
+    {
+        base.OnUpdate();
+
+        EAttack.attackTimer -= Time.deltaTime;
+        EFind.findTimer -= Time.deltaTime;
+
+        if (EFind.findTimer <= 0.0)
+        {
+            FindProject();
+        }
+        if (EAttack.attackTarget != null)
+        {
+            AttackProject();
+        }
+
+
     }
 
     protected override void Init()

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AESpider :  AEnemyActor , ICanMove
+public class AEVampire:  AEnemyActor , ICanMove
 {
     ICanMove icm => GetComponent<ICanMove>();
     Vector2 ICanMove.iDirection { get; set; } = Vector2.zero;
@@ -48,12 +48,23 @@ public class AESpider :  AEnemyActor , ICanMove
         FindTarget();
         EFind.findTimer = 3.0f;
     }
+
+    protected void SkillProject()
+    {
+        for (int i=0; i < ESkill.skillNumber;i++)
+        {
+            Instantiate(ESkill.skillPrefab, transform.position, Quaternion.identity);   
+        }
+    }
+
     protected override void OnUpdate()
     {
         base.OnUpdate();
 
         EAttack.attackTimer -= Time.deltaTime;
         EFind.findTimer -= Time.deltaTime;
+        ESkill.skillTimer -= Time.deltaTime;
+
 
         if (EFind.findTimer <= 0.0)
         {
@@ -62,6 +73,11 @@ public class AESpider :  AEnemyActor , ICanMove
         if (EAttack.attackTarget != null)
         {
             AttackProject();
+        }
+        if (ESkill.skillTimer <= 0.0)
+        {
+            SkillProject();
+            ESkill.skillTimer = ESkill.skillCooldown;
         }
 
 

@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-
+using System;  
 /// <summary>
 /// �йص��˵�λ�������߼�
 /// ����һ��ĵ�λ���з���λ�ǰ��ղ��γ��֣������߼�ӦΪ->
@@ -43,7 +42,19 @@ public class AEnemyActor : EActor
     // �ж�buff
     public virtual void checkBuff()
     {
-
+        foreach(var buff in buffs)
+        {
+            buff.timer -= Time.deltaTime;
+            if(buff.timer < 0.0f)     //buff时间到了，删除。
+            {
+                buff.BuffEnd(gameObject);
+                buffs.Remove(buff);
+            }
+            else
+            {
+                buff.Buffing(gameObject);
+            }
+        }
     }
     //
     /// <GetTarget>
@@ -85,19 +96,12 @@ public class AEnemyActor : EActor
         }
     }
 
-    // Attack 
-    public float attackRadius = 2.0f;  //攻击半径
-
-    public float attackForce = 1.0f;  //攻击力
-
-    public float attackCooldown = 1.0f;  //攻击冷却
-
-    public float attackTimer = 0.0f;  //攻击计时器
-    public GameObject attackTarget;
-
     //Find
-    public float findCooldown = 3.0f;
-    public float findTimer = 0.0f;
+    public FindAttribute EFind;
+    // Attack 
+    public AttackAttribute EAttack;
+    //Skill
+    public SkillAttribute ESkill;
 
     //HP
     public float HP;
@@ -115,7 +119,7 @@ public class AEnemyActor : EActor
             if (dis < minDis)
             {
                 minDis = dis;
-                attackTarget = ett;
+                EAttack.attackTarget = ett;
             }
         }
         // reutrn fTarget;
@@ -128,8 +132,8 @@ public class AEnemyActor : EActor
         // Animation
 
         //Target decrease health
-        var attackTargetActor = attackTarget.GetComponent<AControlableActor>();
-        attackTargetActor.GetDamage(attackForce);
+        var attackTargetActor = EAttack.attackTarget.GetComponent<AControlableActor>();
+        attackTargetActor.GetDamage(EAttack.attackForce);
 
     }
 
@@ -159,3 +163,28 @@ public enum EnemyName
 }
 
 
+[Serializable]
+public class AttackAttribute
+{
+    public float attackRadius = 2.0f;  //攻击半径
+    public float attackForce = 1.0f;  //攻击力
+    public float attackCooldown = 1.0f;  //攻击冷却
+    public float attackTimer = 0.0f;  //攻击计时器
+    public GameObject attackTarget;
+}
+
+[Serializable]
+public class FindAttribute
+{
+    public float findCooldown = 3.0f;
+    public float findTimer = 0.0f;
+}
+
+[Serializable]
+public class SkillAttribute
+{
+    public GameObject skillPrefab;
+    public float skillCooldown = 10.0f;
+    public float skillTimer = 0;
+    public int skillNumber = 3;
+}
