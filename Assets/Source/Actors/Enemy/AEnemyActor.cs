@@ -37,8 +37,8 @@ public class AEnemyActor : EActor
 
     public GameObject target; // Ŀ�굥λ
     public bool isInBound = false; // �Ƿ���һ��Bound�У����ڣ���target�ɸ�Bound����
-    
-     public List<Buff> buffs;
+
+    public List<Buff> buffs;
 
     // �ж�buff
     public virtual void checkBuff()
@@ -60,7 +60,7 @@ public class AEnemyActor : EActor
     public override void Enabled()
     {
         base.Enabled();
-        if(isInBound == false)
+        if (isInBound == false)
             GetTarget();
     }
     public override void SetType()
@@ -73,16 +73,82 @@ public class AEnemyActor : EActor
     protected override void Init()
     {
         base.Init();
-        
+
     }
 
     protected override void OnUpdate()
     {
         base.OnUpdate();
+        if (HP <= 0.0f)
+        {
+            Die();
+        }
     }
 
+    // Attack 
+    public float attackRadius = 2.0f;  //攻击半径
 
+    public float attackForce = 1.0f;  //攻击力
 
+    public float attackCooldown = 1.0f;  //攻击冷却
+
+    public float attackTimer = 0.0f;  //攻击计时器
+    public GameObject attackTarget;
+
+    //Find
+    public float findCooldown = 3.0f;
+    public float findTimer = 0.0f;
+
+    //HP
+    public float HP;
+    public float maxHP;
+
+    // Find Target
+    protected virtual void FindTarget()
+    {
+        var allFriendEtt = GameObject.FindGameObjectsWithTag("friendly");
+        float minDis = 1e9f;
+
+        foreach (var ett in allFriendEtt)
+        {
+            float dis = CompareFunction.EulerDistance(ett.transform.position, transform.position);
+            if (dis < minDis)
+            {
+                minDis = dis;
+                attackTarget = ett;
+            }
+        }
+        // reutrn fTarget;
+    }
+
+    // Attack Target
+    protected virtual void Attack()
+    {
+        // TODO:
+        // Animation
+
+        //Target decrease health
+        var attackTargetActor = attackTarget.GetComponent<AControlableActor>();
+        attackTargetActor.GetDamage(attackForce);
+
+    }
+
+    // Die
+    protected virtual void Die()
+    {
+
+    }
+
+    //Project
+    protected virtual void AttackProject()
+    {
+
+    }
+
+    protected virtual void FindProject()
+    {
+        
+    }
 }
 
 public enum EnemyName
@@ -91,3 +157,5 @@ public enum EnemyName
     AESoldier,
     AEBat,
 }
+
+

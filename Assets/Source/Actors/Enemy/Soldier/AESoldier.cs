@@ -21,19 +21,9 @@ public class AESoldier : AEnemyActor , ICanMove
 
 
     //Attack 数据
-    public GameObject attackTarget = null;
-
-    public float attackRadius = 2.0f;
-
-    public float attackForce = 1.0f;
-
-    public float attackCooldown = 1.0f;
-
-    public float attackTimer = 0.0f;
 
     public float disTarget = 1e9f;
 
-    public float findTimer = 0.0f;
 
     // 检查自身buff
     public override void checkBuff()
@@ -52,36 +42,44 @@ public class AESoldier : AEnemyActor , ICanMove
             }
         }
     }
-        
+
     //寻找目标，谁都打
-    private void FindTarget()
+    protected override void FindTarget()
     {
-        var allFriendEtt = GameObject.FindGameObjectsWithTag("friendly");
-        float minDis = 1e9f;
-        // GameObject fTarget = null;
-        foreach(var ett in allFriendEtt)
+        base.FindTarget();
+    }
+
+    protected override void Attack()
+    {
+        base.Attack();
+    }
+
+    protected override void AttackProject()
+    {
+        float disTarget = CompareFunction.EulerDistance(attackTarget.transform.position, transform.position);
+        // Debug.Log(disTarget);
+        if (disTarget < attackRadius)
         {
-            float dis  = CompareFunction.EulerDistance(ett.transform.position, transform.position);
-            if(dis < minDis)
+            Debug.Log("in soldier radius");
+            if (attackTimer < 0.0)
             {
-                minDis = dis;
-                attackTarget = ett;
+                attackTimer = attackCooldown;
+                Attack();
             }
         }
-        // reutrn fTarget;
+        else
+        {
+            MMoveSystem.MoveTo(this, attackTarget.transform.position);
+            icm.Move(rb2d);
+            Debug.Log("Move" + attackTarget);
+        }
     }
 
-    private void Attack()
+    protected override void FindProject()
     {
-        // TODO:
-            // Animation
-
-            //Target decrease health
-        var attackTargetActor = attackTarget.GetComponent<AControlableActor>();
-        attackTargetActor.GetDamage(1.0f); 
-
+        FindTarget();
+        findTimer = 3.0f;
     }
-
     protected override void OnUpdate()
     {
         base.OnUpdate();
@@ -90,30 +88,13 @@ public class AESoldier : AEnemyActor , ICanMove
         findTimer -= Time.deltaTime;
 
 
-        if (findTimer <=0.0)
+        if (findTimer <= 0.0)
         {
-            FindTarget();
-            findTimer = 3.0f;
-            if(attackTarget == null) return;
-            MMoveSystem.MoveTo(this, attackTarget.transform.position);
+            FindProject();
         }
-        disTarget = CompareFunction.EulerDistance(attackTarget.transform.position, transform.position);
-        // Debug.Log(disTarget);
-        if(disTarget < attackRadius)
+        if (attackTarget != null)
         {
-            Debug.Log("in soldier radius");
-            if(attackTimer < 0.0)
-            {
-                attackTimer  = attackCooldown;
-                Attack();
-            }
-        }
-        else
-        {
-            
-            MMoveSystem.MoveTo(this, attackTarget.transform.position);
-            icm.Move(rb2d);
-            Debug.Log("Move"+attackTarget);
+            AttackProject();
         }
 
 
