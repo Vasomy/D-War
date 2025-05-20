@@ -25,13 +25,13 @@ public class AControlableActor : EActor
     // stop actor move & reset\clear other state's data
     public FCAIdleState idleState;
 
-    public float currentHealth = 10.0f;
-    public float maxHealth = 10.0f;
+    public float HP = 10.0f;
+    public float maxHP = 10.0f;
 
     public virtual void GetDamage(float damage)
     {
-        currentHealth -= damage;
-        if (currentHealth < 0)
+        HP -= damage;
+        if (HP < 0)
         {
             // free this
         }
@@ -86,6 +86,9 @@ public class AControlableActor : EActor
 
     //attack相关参数
     public AttackAttribute CAttack;
+
+    //Skill
+    public SkillAttribute CSkill;
 
     //攻击，启动！
     public virtual void AttackStart(GameObject target)
