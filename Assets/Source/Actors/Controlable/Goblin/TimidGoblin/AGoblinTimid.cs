@@ -14,6 +14,9 @@ public class AGoblinTimid : AControlableActor, ICanMove
     }
     public ICanMove icm =>GetComponent<ICanMove>();
 
+
+    static public int deathNumber = 0; //胆小哥布林的死亡数量
+
     public override void GetDamage(float damage)
     {
         base.GetDamage(damage);
@@ -58,28 +61,36 @@ public class AGoblinTimid : AControlableActor, ICanMove
         Debug.Log("FLee" + fleeX + "," + fleeY);
     }
 
-    protected override void OnUpdate()
+    public override void Die()
     {
-        base.OnUpdate();
-        if(attackTarget!=null&&isFleeing == false)
-        {
-            attackTimer -= Time.deltaTime;
+        base.Die();
+        deathNumber++;
+    }
 
-            MMoveSystem.MoveTo(this, attackTarget.transform.position);
-            float disTarget = CompareFunction.EulerDistance(attackTarget.transform.position, transform.position);
-            if(disTarget <= attackRadius && attackTimer<0.0f)
-            {
-                Attack();
-                // MMoveSystem.MoveTo(this, transform.position);
-            }
-            else if(disTarget > attackRadius)
-            {
-                icm.Move(rb2d);
-            }
+    public void AttackProject()
+    {
+        MMoveSystem.MoveTo(this, CAttack.attackTarget.transform.position);
+        float disTarget = CompareFunction.EulerDistance(CAttack.attackTarget.transform.position, transform.position);
+        if (disTarget <= CAttack.attackRadius && CAttack.attackTimer < 0.0f)
+        {
+            Attack();
         }
-        else
+        else if (disTarget > CAttack.attackRadius)
         {
             icm.Move(rb2d);
         }
+        
+    }
+
+    protected override void OnUpdate()
+    {
+        base.OnUpdate();
+        CAttack.attackTimer -= Time.deltaTime;
+
+        if (CAttack.attackTarget != null)
+        {
+            AttackProject();
+        }
+
     }
 }

@@ -1,11 +1,12 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-
-public class AEBat : AEnemyActor , ICanMove
+public class AERedDestructor : AEnemyActor , ICanMove
 {
     ICanMove icm => GetComponent<ICanMove>();
     Vector2 ICanMove.iDirection { get; set; } = Vector2.zero;
-    float ICanMove.iSpeed { get; set; } = 10.0f;
+    float ICanMove.iSpeed { get; set; } = 1.0f;
     FlowFieldPathFinding ICanMove.iPathFinding { get; set;} = null;
 
     public void ChangeToMoveState()
@@ -28,11 +29,11 @@ public class AEBat : AEnemyActor , ICanMove
         float disTarget = CompareFunction.EulerDistance(EAttack.attackTarget.transform.position, transform.position);
         if (disTarget < EAttack.attackRadius)
         {
-            // Debug.Log("long" + disTarget);
             if (EAttack.attackTimer < 0.0)
             {
                 EAttack.attackTimer = EAttack.attackCooldown;
                 Attack();
+                Die();
             }
         }
         else

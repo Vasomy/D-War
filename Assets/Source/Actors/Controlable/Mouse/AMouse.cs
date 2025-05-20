@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class AWolf : AControlableActor ,ICanMove
+public class AMouse :AControlableActor ,ICanMove
 {
     Vector2 ICanMove.iDirection { get; set; } = Vector2.zero;
     FlowFieldPathFinding ICanMove.iPathFinding { get; set; } = null;

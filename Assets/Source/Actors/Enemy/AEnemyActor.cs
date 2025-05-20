@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;  
+using System;
 /// <summary>
 /// �йص��˵�λ�������߼�
 /// ����һ��ĵ�λ���з���λ�ǰ��ղ��γ��֣������߼�ӦΪ->
@@ -42,10 +42,10 @@ public class AEnemyActor : EActor
     // �ж�buff
     public virtual void checkBuff()
     {
-        foreach(var buff in buffs)
+        foreach (var buff in buffs)
         {
             buff.timer -= Time.deltaTime;
-            if(buff.timer < 0.0f)     //buff时间到了，删除。
+            if (buff.timer < 0.0f)     //buff时间到了，删除。
             {
                 buff.BuffEnd(gameObject);
                 buffs.Remove(buff);
@@ -115,6 +115,7 @@ public class AEnemyActor : EActor
 
         foreach (var ett in allFriendEtt)
         {
+
             float dis = CompareFunction.EulerDistance(ett.transform.position, transform.position);
             if (dis < minDis)
             {
@@ -140,7 +141,7 @@ public class AEnemyActor : EActor
     // Die
     protected virtual void Die()
     {
-
+        Destroy(gameObject);
     }
 
     //Project
@@ -151,7 +152,16 @@ public class AEnemyActor : EActor
 
     protected virtual void FindProject()
     {
-        
+
+    }
+    
+    public virtual void GetDamage(float damage)
+    {
+        HP -= damage;
+        if (HP < 0)
+        {
+            // free this
+        }
     }
 }
 
@@ -163,28 +173,3 @@ public enum EnemyName
 }
 
 
-[Serializable]
-public class AttackAttribute
-{
-    public float attackRadius = 2.0f;  //攻击半径
-    public float attackForce = 1.0f;  //攻击力
-    public float attackCooldown = 1.0f;  //攻击冷却
-    public float attackTimer = 0.0f;  //攻击计时器
-    public GameObject attackTarget;
-}
-
-[Serializable]
-public class FindAttribute
-{
-    public float findCooldown = 3.0f;
-    public float findTimer = 0.0f;
-}
-
-[Serializable]
-public class SkillAttribute
-{
-    public GameObject skillPrefab;
-    public float skillCooldown = 10.0f;
-    public float skillTimer = 0;
-    public int skillNumber = 3;
-}

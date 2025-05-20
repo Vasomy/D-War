@@ -17,9 +17,9 @@ public enum EControlableProperties : int
 
 
 //  可以被框选的实体，其他实体最多被点选
-public class AControlableActor : EActor 
+public class AControlableActor : EActor
 {
-    
+
     //
     public FControlableActorStateMachine stateMachine;
     // stop actor move & reset\clear other state's data
@@ -31,7 +31,7 @@ public class AControlableActor : EActor
     public virtual void GetDamage(float damage)
     {
         currentHealth -= damage;
-        if(currentHealth < 0)
+        if (currentHealth < 0)
         {
             // free this
         }
@@ -71,7 +71,7 @@ public class AControlableActor : EActor
         var icm = GetComponent<ICanMove>();
         if (icm == null) return;
 
-        if(fDir == Vector2.zero)
+        if (fDir == Vector2.zero)
         {
             rb2d.velocity = Vector2.zero;
         }
@@ -85,25 +85,26 @@ public class AControlableActor : EActor
 
 
     //attack相关参数
-    public GameObject attackTarget;
-
-    public float attackForce = 3.0f;
-    public float attackCooldown = 3.0f;
-    public float attackRadius = 3.0f;
-    public float attackTimer = 3.0f;
+    public AttackAttribute CAttack;
 
     //攻击，启动！
     public virtual void AttackStart(GameObject target)
     {
-        Debug.Log(gameObject +" 开始攻击"+ target);
-        attackTarget = target;
+        Debug.Log(gameObject + " 开始攻击" + target);
+        CAttack.attackTarget = target;
     }
 
     //攻击！！！
     public virtual void Attack()
     {
-        Debug.Log(attackTarget +"-"+attackForce+"血量");
-        attackTimer = attackCooldown;
+        Debug.Log(CAttack.attackTarget + "-" + CAttack.attackForce + "血量");
+        CAttack.attackTimer = CAttack.attackCooldown;
     }
 
+
+    //Die
+    public virtual void Die()
+    {
+        Destroy(gameObject);
+    }
 }

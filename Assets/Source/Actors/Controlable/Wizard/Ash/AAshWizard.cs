@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class AWolf : AControlableActor ,ICanMove
+public class AAshWizard :AControlableActor ,ICanMove
 {
     Vector2 ICanMove.iDirection { get; set; } = Vector2.zero;
     FlowFieldPathFinding ICanMove.iPathFinding { get; set; } = null;
@@ -18,10 +17,8 @@ public class AWolf : AControlableActor ,ICanMove
     public ICanMove icm =>GetComponent<ICanMove>();
 
     public FCAMoveState moveState;
-    
-    
 
- 
+
 
     public void AttackProject()
     {
@@ -30,6 +27,10 @@ public class AWolf : AControlableActor ,ICanMove
         if (disTarget <= CAttack.attackRadius && CAttack.attackTimer < 0.0f)
         {
             Attack();
+            var aEnemtActor = CAttack.attackTarget.GetComponent<AEnemyActor>();
+            var buffAshWizard = new BuffAshWizard();
+            aEnemtActor.buffs.Add(buffAshWizard);
+            buffAshWizard.BuffBegin(CAttack.attackTarget);
         }
         else if (disTarget > CAttack.attackRadius)
         {

@@ -1,24 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class AWolf : AControlableActor ,ICanMove
+public class AGoblinKing : AControlableActor ,ICanMove
 {
     Vector2 ICanMove.iDirection { get; set; } = Vector2.zero;
     FlowFieldPathFinding ICanMove.iPathFinding { get; set; } = null;
     float ICanMove.iSpeed { get; set; } = 1.0f;
-
     public void ChangeToMoveState()
     {
         // stateMachine.ChangeState(moveState);
     }
-
-
     public ICanMove icm =>GetComponent<ICanMove>();
-
     public FCAMoveState moveState;
-    
     
 
  
@@ -35,7 +29,6 @@ public class AWolf : AControlableActor ,ICanMove
         {
             icm.Move(rb2d);
         }
-        
     }
 
     protected override void OnUpdate()
@@ -49,13 +42,12 @@ public class AWolf : AControlableActor ,ICanMove
         }
 
     }
-
-
     
     protected override void Init()
     {
         base.Init();
     }
+
 
 
 }

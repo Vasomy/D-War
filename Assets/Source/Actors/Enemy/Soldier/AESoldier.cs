@@ -54,7 +54,6 @@ public class AESoldier : AEnemyActor , ICanMove
     protected override void OnUpdate()
     {
         base.OnUpdate();
-
         EAttack.attackTimer -= Time.deltaTime;
         EFind.findTimer -= Time.deltaTime;
 
